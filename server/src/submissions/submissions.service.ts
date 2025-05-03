@@ -1,12 +1,23 @@
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
+import { ClientKafkaProxy } from '@nestjs/microservices';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Challenge } from 'src/challenges/challenge.entity';
 import { Repository } from 'typeorm';
+import { z } from 'zod';
 import { Submission, SubmissionStatus } from './submission.entity';
+
+const CorrectionResponseSchema = z.object({
+  repositoryUrl: z.string(),
+  grade: z.number(),
+  status: z.nativeEnum(SubmissionStatus),
+});
 
 @Injectable()
 export class SubmissionsService {
   constructor(
+    @Inject('CORRECTIONS_SERVICE')
+    private readonly correctionsService: ClientKafkaProxy,
+
     @InjectRepository(Challenge)
     private readonly challengesRepository: Repository<Challenge>,
 
@@ -18,7 +29,7 @@ export class SubmissionsService {
     return this.submissionsRepository.find();
   }
 
-  async create({
+  private async create({
     challengeId,
     repositoryUrl,
   }: {
@@ -47,11 +58,47 @@ export class SubmissionsService {
       throw new Error('Challenge not found.');
     }
 
-    // TODO: Connect to corrections service and update the submission grade and status
+    return submission;
+  }
+
+  async submitChallenge({
+    challengeId,
+    repositoryUrl,
+  }: {
+    challengeId: string;
+    repositoryUrl: string;
+  }): Promise<Submission> {
+    const submission = await this.create({ challengeId, repositoryUrl });
+
+    let correction: unknown;
+
+    try {
+      correction = await new Promise((resolve, reject) => {
+        return this.correctionsService
+          .send('challenge.correction', {
+            submissionId: submission.id,
+            repositoryUrl: submission.repositoryUrl,
+          })
+          .subscribe({
+            next: resolve,
+            error: reject,
+          });
+      });
+    } catch {
+      throw new Error('Error while connecting to the corrections service.');
+    }
+
+    const parsedCorrection = CorrectionResponseSchema.safeParse(correction);
+
+    if (!parsedCorrection.success) {
+      throw new Error('Invalid response from the corrections service.');
+    }
+
+    const { status, grade } = parsedCorrection.data;
 
     this.submissionsRepository.merge(submission, {
-      status: SubmissionStatus.Done,
-      grade: 10,
+      status,
+      grade,
     });
 
     return this.submissionsRepository.save(submission);

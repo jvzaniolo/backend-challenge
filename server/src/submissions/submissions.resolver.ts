@@ -16,7 +16,7 @@ export class SubmissionsResolver {
     @Args('challengeId') challengeId: string,
     @Args('repositoryUrl') repositoryUrl: string,
   ): Promise<Submission> {
-    return this.submissionsService.create({
+    return this.submissionsService.submitChallenge({
       challengeId,
       repositoryUrl,
     });
