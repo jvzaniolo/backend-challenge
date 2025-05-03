@@ -1,5 +1,6 @@
 import { Field, ID, ObjectType } from '@nestjs/graphql';
-import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Submission } from 'src/submissions/submission.entity';
+import { Column, CreateDateColumn, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
 @ObjectType()
@@ -19,4 +20,8 @@ export class Challenge {
   @Field()
   @CreateDateColumn()
   createdAt: Date;
+
+  @Field(() => [Submission], { nullable: true })
+  @OneToMany(() => Submission, (submission) => submission.challenge)
+  submissions?: Submission[];
 }

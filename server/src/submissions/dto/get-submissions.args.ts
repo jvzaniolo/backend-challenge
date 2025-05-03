@@ -10,4 +10,7 @@ export class GetSubmissionArgs extends PaginationArgs {
 
   @Field(() => DateRangeArgs, { nullable: true })
   dateRange?: DateRangeArgs;
+
+  @Field({ nullable: true })
+  challengeTitle?: string;
 }

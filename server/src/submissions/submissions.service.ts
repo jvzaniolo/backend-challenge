@@ -30,6 +30,7 @@ export class SubmissionsService {
       page?: number;
       perPage: number;
       status?: SubmissionStatus;
+      challengeTitle?: string;
       dateRange?: {
         startDate: Date;
         endDate: Date;
@@ -46,6 +47,12 @@ export class SubmissionsService {
         createdAt: filters.dateRange
           ? Between(filters.dateRange.startDate, filters.dateRange.endDate)
           : undefined,
+        challenge: {
+          title: filters.challengeTitle,
+        },
+      },
+      relations: {
+        challenge: true,
       },
     });
   }

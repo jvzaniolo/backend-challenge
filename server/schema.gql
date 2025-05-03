@@ -6,6 +6,7 @@ type Challenge {
   createdAt: DateTime!
   description: String!
   id: ID!
+  submissions: [Submission!]
   title: String!
 }
 
@@ -35,10 +36,11 @@ type Query {
     perPage: Int
     title: String
   ): [Challenge!]!
-  submissions(dateRange: DateRangeArgs, page: Int, perPage: Int = 10, status: SubmissionStatus): [Submission!]!
+  submissions(challengeTitle: String, dateRange: DateRangeArgs, page: Int, perPage: Int = 10, status: SubmissionStatus): [Submission!]!
 }
 
 type Submission {
+  challenge: Challenge
   challengeId: ID!
   createdAt: DateTime!
   grade: Float

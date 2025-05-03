@@ -1,5 +1,13 @@
 import { Field, Float, ID, ObjectType, registerEnumType } from '@nestjs/graphql';
-import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Challenge } from 'src/challenges/challenge.entity';
+import {
+  Column,
+  CreateDateColumn,
+  Entity,
+  JoinColumn,
+  ManyToOne,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 
 export enum SubmissionStatus {
   Pending = 'Pending',
@@ -42,4 +50,12 @@ export class Submission {
   @Field()
   @CreateDateColumn()
   createdAt: Date;
+
+  @Field(() => Challenge, { nullable: true })
+  @ManyToOne(() => Challenge, (challenge) => challenge.submissions, {
+    nullable: true,
+    createForeignKeyConstraints: false,
+  })
+  @JoinColumn({ name: 'challengeId' })
+  challenge?: Challenge;
 }
