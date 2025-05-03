@@ -1,16 +1,16 @@
 import { Injectable } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
 import { Challenge } from './challenge.model';
 
 @Injectable()
 export class ChallengeService {
+  constructor(
+    @InjectRepository(Challenge)
+    private readonly challengeRepository: Repository<Challenge>,
+  ) {}
+
   findMany(): Promise<Challenge[]> {
-    return Promise.resolve([
-      {
-        id: '1',
-        title: 'Sample Challenge',
-        description: 'This is a sample challenge description.',
-        createdAt: new Date(),
-      },
-    ]);
+    return this.challengeRepository.find();
   }
 }
