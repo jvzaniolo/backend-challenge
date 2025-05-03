@@ -13,4 +13,18 @@ export class SubmissionsService {
   findMany(): Promise<Submission[]> {
     return this.submissionsRepository.find();
   }
+
+  create({
+    challengeId,
+    repositoryUrl,
+  }: {
+    challengeId: string;
+    repositoryUrl: string;
+  }): Promise<Submission> {
+    const submission = this.submissionsRepository.create({
+      challengeId,
+      repositoryUrl,
+    });
+    return this.submissionsRepository.save(submission);
+  }
 }
