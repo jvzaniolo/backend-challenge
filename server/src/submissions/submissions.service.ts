@@ -2,7 +2,7 @@ import { Inject, Injectable } from '@nestjs/common';
 import { ClientKafkaProxy } from '@nestjs/microservices';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Challenge } from 'src/challenges/challenge.entity';
-import { Between, Repository } from 'typeorm';
+import { Between, ILike, Repository } from 'typeorm';
 import { z } from 'zod';
 import { GetSubmissionArgs } from './dto/get-submissions.args';
 import { Submission, SubmissionStatus } from './submission.entity';
@@ -40,7 +40,7 @@ export class SubmissionsService {
         status,
         createdAt: dateRange ? Between(dateRange.startDate, dateRange.endDate) : undefined,
         challenge: {
-          title: challengeTitle,
+          title: challengeTitle ? ILike(`%${challengeTitle}%`) : undefined,
         },
       },
       relations: {

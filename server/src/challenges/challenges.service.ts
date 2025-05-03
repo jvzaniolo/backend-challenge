@@ -1,6 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { ILike, Repository } from 'typeorm';
 import { Challenge } from './challenge.entity';
 import { GetChallengesArgs } from './dto/get-challenges.args';
 
@@ -16,8 +16,8 @@ export class ChallengesService {
       skip: page ? (page - 1) * perPage : undefined,
       take: perPage,
       where: {
-        title,
-        description,
+        title: title ? ILike(`%${title}%`) : undefined,
+        description: description ? ILike(`%${description}%`) : undefined,
       },
     });
   }
