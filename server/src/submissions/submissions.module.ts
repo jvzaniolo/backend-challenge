@@ -1,11 +1,12 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { Challenge } from 'src/challenges/challenge.entity';
 import { Submission } from './submission.entity';
 import { SubmissionsResolver } from './submissions.resolver';
 import { SubmissionsService } from './submissions.service';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Submission])],
+  imports: [TypeOrmModule.forFeature([Challenge, Submission])],
   providers: [SubmissionsResolver, SubmissionsService],
 })
 export class SubmissionsModule {}

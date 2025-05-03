@@ -1,7 +1,7 @@
 import { Field, Float, ID, ObjectType, registerEnumType } from '@nestjs/graphql';
 import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
-enum SubmissionStatus {
+export enum SubmissionStatus {
   Pending = 'Pending',
   Done = 'Done',
   Error = 'Error',
