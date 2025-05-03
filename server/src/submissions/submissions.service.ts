@@ -2,7 +2,7 @@ import { Inject, Injectable } from '@nestjs/common';
 import { ClientKafkaProxy } from '@nestjs/microservices';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Challenge } from 'src/challenges/challenge.entity';
-import { Repository } from 'typeorm';
+import { Between, Repository } from 'typeorm';
 import { z } from 'zod';
 import { Submission, SubmissionStatus } from './submission.entity';
 
@@ -25,9 +25,20 @@ export class SubmissionsService {
     private readonly submissionsRepository: Repository<Submission>,
   ) {}
 
-  findMany(filters: { status?: SubmissionStatus }): Promise<Submission[]> {
+  findMany(
+    filters: {
+      status?: SubmissionStatus;
+      dateRange?: {
+        startDate: Date;
+        endDate: Date;
+      };
+    } = {},
+  ): Promise<Submission[]> {
     return this.submissionsRepository.findBy({
       status: filters.status,
+      createdAt: filters.dateRange
+        ? Between(filters.dateRange.startDate, filters.dateRange.endDate)
+        : undefined,
     });
   }
 

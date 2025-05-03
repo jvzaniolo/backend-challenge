@@ -9,6 +9,11 @@ type Challenge {
   title: String!
 }
 
+input DateRangeArgs {
+  endDate: DateTime!
+  startDate: DateTime!
+}
+
 """
 A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
 """
@@ -30,7 +35,7 @@ type Query {
     perPage: Int
     title: String
   ): [Challenge!]!
-  submissions(status: String): [Submission!]!
+  submissions(dateRange: DateRangeArgs, status: String): [Submission!]!
 }
 
 type Submission {
