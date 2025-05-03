@@ -21,5 +21,12 @@ type Mutation {
 }
 
 type Query {
-  challenges(description: String, title: String): [Challenge!]!
+  challenges(
+    description: String
+    page: Int
+
+    """Defaults to 10."""
+    perPage: Int
+    title: String
+  ): [Challenge!]!
 }

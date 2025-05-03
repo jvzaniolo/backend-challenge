@@ -10,8 +10,20 @@ export class ChallengeService {
     private readonly challengeRepository: Repository<Challenge>,
   ) {}
 
-  findMany({ title, description }: { title?: string; description?: string }): Promise<Challenge[]> {
+  findMany({
+    title,
+    description,
+    page,
+    perPage,
+  }: {
+    title?: string;
+    description?: string;
+    page?: number;
+    perPage: number;
+  }): Promise<Challenge[]> {
     return this.challengeRepository.find({
+      skip: page ? (page - 1) * perPage : undefined,
+      take: perPage,
       where: {
         title,
         description,
