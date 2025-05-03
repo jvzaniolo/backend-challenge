@@ -1,10 +1,10 @@
 import { Args, Int, Mutation, Query, Resolver } from '@nestjs/graphql';
-import { Challenge } from './challenge.model';
-import { ChallengeService } from './challenge.service';
+import { Challenge } from './challenge.entity';
+import { ChallengesService } from './challenges.service';
 
 @Resolver(() => Challenge)
-export class ChallengeResolver {
-  constructor(private challengesService: ChallengeService) {}
+export class ChallengesResolver {
+  constructor(private challengesService: ChallengesService) {}
 
   @Query(() => [Challenge])
   async challenges(
