@@ -21,4 +21,15 @@ export class ChallengeService {
     });
     return this.challengeRepository.save(challenge);
   }
+
+  async update(
+    id: string,
+    { title, description }: { title?: string; description?: string },
+  ): Promise<Challenge> {
+    await this.challengeRepository.update(id, {
+      title,
+      description,
+    });
+    return this.challengeRepository.findOneByOrFail({ id });
+  }
 }

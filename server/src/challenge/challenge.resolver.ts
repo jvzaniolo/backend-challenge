@@ -18,4 +18,13 @@ export class ChallengeResolver {
   ): Promise<Challenge> {
     return this.challengesService.create({ title, description });
   }
+
+  @Mutation(() => Challenge)
+  async updateChallenge(
+    @Args('id') id: string,
+    @Args('title', { nullable: true }) title?: string,
+    @Args('description', { nullable: true }) description?: string,
+  ): Promise<Challenge> {
+    return this.challengesService.update(id, { title, description });
+  }
 }
