@@ -16,6 +16,7 @@ scalar DateTime
 
 type Mutation {
   createChallenge(description: String!, title: String!): Challenge!
+  deleteChallenge(id: String!): Challenge!
   updateChallenge(description: String, id: String!, title: String): Challenge!
 }
 

@@ -27,4 +27,9 @@ export class ChallengeResolver {
   ): Promise<Challenge> {
     return this.challengesService.update(id, { title, description });
   }
+
+  @Mutation(() => Challenge)
+  async deleteChallenge(@Args('id') id: string): Promise<Challenge> {
+    return this.challengesService.delete(id);
+  }
 }

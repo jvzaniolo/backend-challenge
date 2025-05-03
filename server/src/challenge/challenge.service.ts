@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Challenge } from './challenge.model';
@@ -31,5 +31,14 @@ export class ChallengeService {
       description,
     });
     return this.challengeRepository.findOneByOrFail({ id });
+  }
+
+  async delete(id: string): Promise<Challenge> {
+    const challenge = await this.challengeRepository.findOneBy({ id });
+    if (!challenge) {
+      throw new NotFoundException('Challenge not found');
+    }
+    await this.challengeRepository.delete(id);
+    return challenge;
   }
 }
