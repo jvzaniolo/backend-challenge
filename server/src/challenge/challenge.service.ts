@@ -13,4 +13,12 @@ export class ChallengeService {
   findMany(): Promise<Challenge[]> {
     return this.challengeRepository.find();
   }
+
+  create({ title, description }: { title: string; description: string }): Promise<Challenge> {
+    const challenge = this.challengeRepository.create({
+      title,
+      description,
+    });
+    return this.challengeRepository.save(challenge);
+  }
 }
