@@ -10,8 +10,13 @@ export class ChallengeService {
     private readonly challengeRepository: Repository<Challenge>,
   ) {}
 
-  findMany(): Promise<Challenge[]> {
-    return this.challengeRepository.find();
+  findMany({ title, description }: { title?: string; description?: string }): Promise<Challenge[]> {
+    return this.challengeRepository.find({
+      where: {
+        title,
+        description,
+      },
+    });
   }
 
   create({ title, description }: { title: string; description: string }): Promise<Challenge> {

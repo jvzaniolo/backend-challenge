@@ -7,8 +7,11 @@ export class ChallengeResolver {
   constructor(private challengesService: ChallengeService) {}
 
   @Query(() => [Challenge])
-  async challenges(): Promise<Challenge[]> {
-    return this.challengesService.findMany();
+  async challenges(
+    @Args('title', { nullable: true }) title?: string,
+    @Args('description', { nullable: true }) description?: string,
+  ): Promise<Challenge[]> {
+    return this.challengesService.findMany({ title, description });
   }
 
   @Mutation(() => Challenge)
