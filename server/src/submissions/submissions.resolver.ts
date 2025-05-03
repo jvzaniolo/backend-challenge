@@ -1,21 +1,13 @@
 import { Query, Resolver } from '@nestjs/graphql';
-import { Submission } from './submissions.entity';
+import { Submission } from './submission.entity';
+import { SubmissionsService } from './submissions.service';
 
 @Resolver(() => Submission)
 export class SubmissionsResolver {
-  constructor() {}
+  constructor(private readonly submissionsService: SubmissionsService) {}
 
   @Query(() => [Submission])
-  submissions(): Submission[] {
-    return [
-      {
-        id: '1',
-        challengeId: '1',
-        repositoryUrl: 'url',
-        grade: 0,
-        status: 'Pending',
-        createdAt: new Date(),
-      },
-    ];
+  async submissions(): Promise<Submission[]> {
+    return this.submissionsService.findMany();
   }
 }
