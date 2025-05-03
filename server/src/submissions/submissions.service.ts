@@ -27,18 +27,26 @@ export class SubmissionsService {
 
   findMany(
     filters: {
+      page?: number;
+      perPage: number;
       status?: SubmissionStatus;
       dateRange?: {
         startDate: Date;
         endDate: Date;
       };
-    } = {},
+    } = {
+      perPage: 10,
+    },
   ): Promise<Submission[]> {
-    return this.submissionsRepository.findBy({
-      status: filters.status,
-      createdAt: filters.dateRange
-        ? Between(filters.dateRange.startDate, filters.dateRange.endDate)
-        : undefined,
+    return this.submissionsRepository.find({
+      skip: filters.page ? (filters.page - 1) * filters.perPage : 0,
+      take: filters.perPage,
+      where: {
+        status: filters.status,
+        createdAt: filters.dateRange
+          ? Between(filters.dateRange.startDate, filters.dateRange.endDate)
+          : undefined,
+      },
     });
   }
 

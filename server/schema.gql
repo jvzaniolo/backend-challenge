@@ -35,7 +35,7 @@ type Query {
     perPage: Int
     title: String
   ): [Challenge!]!
-  submissions(dateRange: DateRangeArgs, status: String): [Submission!]!
+  submissions(dateRange: DateRangeArgs, page: Int, perPage: Int = 10, status: SubmissionStatus): [Submission!]!
 }
 
 type Submission {
