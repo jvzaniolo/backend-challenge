@@ -1,9 +1,13 @@
 import { Query, Resolver } from '@nestjs/graphql';
+import { Challenge } from './challenge.model';
+import { ChallengeService } from './challenge.service';
 
-@Resolver()
+@Resolver(() => Challenge)
 export class ChallengeResolver {
-  @Query(() => String)
-  hello(): string {
-    return 'Hello World!';
+  constructor(private challengesService: ChallengeService) {}
+
+  @Query(() => [Challenge])
+  async challenges(): Promise<Challenge[]> {
+    return this.challengesService.findMany();
   }
 }
