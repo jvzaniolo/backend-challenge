@@ -1,5 +1,20 @@
-import { Field, Float, ID, ObjectType } from '@nestjs/graphql';
+import { Field, Float, ID, ObjectType, registerEnumType } from '@nestjs/graphql';
 import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn } from 'typeorm';
+
+enum SubmissionStatus {
+  Pending = 'Pending',
+  Done = 'Done',
+  Error = 'Error',
+}
+
+registerEnumType(SubmissionStatus, {
+  name: 'SubmissionStatus',
+  valuesMap: {
+    Pending: {
+      description: 'The default status.',
+    },
+  },
+});
 
 @Entity()
 @ObjectType()
@@ -17,12 +32,12 @@ export class Submission {
   repositoryUrl: string;
 
   @Field(() => Float, { nullable: true })
-  @Column()
-  grade: number;
+  @Column({ nullable: true, type: 'float' })
+  grade?: number;
 
-  @Field({ defaultValue: 'Pending', description: 'Defaults to `Pending`' })
-  @Column({ default: 'Pending' })
-  status: 'Pending' | 'Done' | 'Error';
+  @Field(() => SubmissionStatus)
+  @Column({ type: 'enum', enum: SubmissionStatus, default: SubmissionStatus.Pending })
+  status: SubmissionStatus = SubmissionStatus.Pending;
 
   @Field()
   @CreateDateColumn()

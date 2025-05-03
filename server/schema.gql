@@ -38,7 +38,13 @@ type Submission {
   grade: Float
   id: ID!
   repositoryUrl: String!
+  status: SubmissionStatus!
+}
 
-  """Defaults to `Pending`"""
-  status: String!
+enum SubmissionStatus {
+  Done
+  Error
+
+  """The default status."""
+  Pending
 }
