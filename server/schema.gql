@@ -30,7 +30,7 @@ type Query {
     perPage: Int
     title: String
   ): [Challenge!]!
-  submissions: [Submission!]!
+  submissions(status: String): [Submission!]!
 }
 
 type Submission {

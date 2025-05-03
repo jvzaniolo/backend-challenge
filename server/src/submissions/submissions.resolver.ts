@@ -1,5 +1,5 @@
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
-import { Submission } from './submission.entity';
+import { Submission, SubmissionStatus } from './submission.entity';
 import { SubmissionsService } from './submissions.service';
 
 @Resolver(() => Submission)
@@ -7,8 +7,10 @@ export class SubmissionsResolver {
   constructor(private readonly submissionsService: SubmissionsService) {}
 
   @Query(() => [Submission])
-  async submissions(): Promise<Submission[]> {
-    return this.submissionsService.findMany();
+  async submissions(
+    @Args('status', { nullable: true }) status?: SubmissionStatus,
+  ): Promise<Submission[]> {
+    return this.submissionsService.findMany({ status });
   }
 
   @Mutation(() => Submission)

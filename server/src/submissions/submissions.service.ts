@@ -25,8 +25,10 @@ export class SubmissionsService {
     private readonly submissionsRepository: Repository<Submission>,
   ) {}
 
-  findMany(): Promise<Submission[]> {
-    return this.submissionsRepository.find();
+  findMany(filters: { status?: SubmissionStatus }): Promise<Submission[]> {
+    return this.submissionsRepository.findBy({
+      status: filters.status,
+    });
   }
 
   private async create({
