@@ -8,7 +8,7 @@ export class SubmissionsResolver {
   constructor(private readonly submissionsService: SubmissionsService) {}
 
   @Query(() => [Submission])
-  async submissions(@Args() filters?: GetSubmissionArgs): Promise<Submission[]> {
+  async submissions(@Args() filters: GetSubmissionArgs): Promise<Submission[]> {
     return this.submissionsService.findMany(filters);
   }
 

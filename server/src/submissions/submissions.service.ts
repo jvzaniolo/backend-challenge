@@ -4,6 +4,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Challenge } from 'src/challenges/challenge.entity';
 import { Between, Repository } from 'typeorm';
 import { z } from 'zod';
+import { GetSubmissionArgs } from './dto/get-submissions.args';
 import { Submission, SubmissionStatus } from './submission.entity';
 
 const CorrectionResponseSchema = z.object({
@@ -25,30 +26,21 @@ export class SubmissionsService {
     private readonly submissionsRepository: Repository<Submission>,
   ) {}
 
-  findMany(
-    filters: {
-      page?: number;
-      perPage: number;
-      status?: SubmissionStatus;
-      challengeTitle?: string;
-      dateRange?: {
-        startDate: Date;
-        endDate: Date;
-      };
-    } = {
-      perPage: 10,
-    },
-  ): Promise<Submission[]> {
+  findMany({
+    page,
+    perPage,
+    status,
+    dateRange,
+    challengeTitle,
+  }: GetSubmissionArgs): Promise<Submission[]> {
     return this.submissionsRepository.find({
-      skip: filters.page ? (filters.page - 1) * filters.perPage : 0,
-      take: filters.perPage,
+      skip: page ? (page - 1) * perPage : 0,
+      take: perPage,
       where: {
-        status: filters.status,
-        createdAt: filters.dateRange
-          ? Between(filters.dateRange.startDate, filters.dateRange.endDate)
-          : undefined,
+        status,
+        createdAt: dateRange ? Between(dateRange.startDate, dateRange.endDate) : undefined,
         challenge: {
-          title: filters.challengeTitle,
+          title: challengeTitle,
         },
       },
       relations: {

@@ -1,20 +1,15 @@
-import { Args, Int, Mutation, Query, Resolver } from '@nestjs/graphql';
+import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { Challenge } from './challenge.entity';
 import { ChallengesService } from './challenges.service';
+import { GetChallengesArgs } from './dto/get-challenges.args';
 
 @Resolver(() => Challenge)
 export class ChallengesResolver {
   constructor(private challengesService: ChallengesService) {}
 
   @Query(() => [Challenge])
-  async challenges(
-    @Args('title', { nullable: true }) title?: string,
-    @Args('description', { nullable: true }) description?: string,
-    @Args({ name: 'page', type: () => Int, nullable: true }) page?: number,
-    @Args({ name: 'perPage', type: () => Int, nullable: true, description: 'Defaults to 10.' })
-    perPage: number = 10,
-  ): Promise<Challenge[]> {
-    return this.challengesService.findMany({ title, description, page, perPage });
+  async challenges(@Args() filters: GetChallengesArgs): Promise<Challenge[]> {
+    return this.challengesService.findMany(filters);
   }
 
   @Mutation(() => Challenge)

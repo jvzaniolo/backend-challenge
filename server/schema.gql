@@ -33,10 +33,18 @@ type Query {
     page: Int
 
     """Defaults to 10."""
-    perPage: Int
+    perPage: Int = 10
     title: String
   ): [Challenge!]!
-  submissions(challengeTitle: String, dateRange: DateRangeArgs, page: Int, perPage: Int = 10, status: SubmissionStatus): [Submission!]!
+  submissions(
+    challengeTitle: String
+    dateRange: DateRangeArgs
+    page: Int
+
+    """Defaults to 10."""
+    perPage: Int = 10
+    status: SubmissionStatus
+  ): [Submission!]!
 }
 
 type Submission {
