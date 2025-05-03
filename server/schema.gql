@@ -29,4 +29,16 @@ type Query {
     perPage: Int
     title: String
   ): [Challenge!]!
+  submissions: [Submission!]!
+}
+
+type Submission {
+  challengeId: ID!
+  createdAt: DateTime!
+  grade: Float
+  id: ID!
+  repositoryUrl: String!
+
+  """Defaults to `Pending`"""
+  status: String!
 }

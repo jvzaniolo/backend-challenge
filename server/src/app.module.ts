@@ -3,6 +3,7 @@ import { Module } from '@nestjs/common';
 import { GraphQLModule } from '@nestjs/graphql';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ChallengesModule } from './challenges/challenges.module';
+import { SubmissionsModule } from './submissions/submissions.module';
 
 @Module({
   imports: [
@@ -22,6 +23,7 @@ import { ChallengesModule } from './challenges/challenges.module';
       synchronize: process.env.NODE_ENV !== 'production',
     }),
     ChallengesModule,
+    SubmissionsModule,
   ],
   controllers: [],
   providers: [],
