@@ -11,6 +11,7 @@ import { SubmissionsModule } from './submissions/submissions.module';
       driver: ApolloDriver,
       autoSchemaFile: 'schema.gql',
       sortSchema: true,
+      graphiql: true,
     }),
     TypeOrmModule.forRoot({
       type: 'postgres',
