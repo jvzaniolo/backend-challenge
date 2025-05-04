@@ -3,6 +3,7 @@ import { ClientKafkaProxy } from '@nestjs/microservices';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Between, ILike, Repository } from 'typeorm';
 import { z } from 'zod';
+import { isGithubRepo } from '~/@core/utils/is-github-repo';
 import { Challenge } from '~/challenges/challenge.entity';
 import { GetSubmissionArgs } from './dto/get-submissions.args';
 import { Submission, SubmissionStatus } from './submission.entity';
@@ -123,9 +124,4 @@ export class SubmissionsService {
 
     return this.submissionsRepository.save(submission);
   }
-}
-
-function isGithubRepo(url: string): boolean {
-  const regex = /^(https?:\/\/)?(www\.)?github\.com\/([^/]+)\/([^/]+)/;
-  return regex.test(url);
 }
