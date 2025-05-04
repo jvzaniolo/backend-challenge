@@ -1,23 +1,16 @@
-import { Inject, Injectable } from '@nestjs/common';
-import { ClientKafkaProxy } from '@nestjs/microservices';
+import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Between, ILike, Repository } from 'typeorm';
-import { z } from 'zod';
 import { isGithubRepo } from '~/@core/utils/is-github-repo';
 import { Challenge } from '~/challenges/challenge.entity';
+import { CorrectionsService } from '~/corrections/corrections.service';
 import { GetSubmissionArgs } from './dto/get-submissions.args';
 import { Submission, SubmissionStatus } from './submission.entity';
-
-const CorrectionResponseSchema = z.object({
-  grade: z.number(),
-  status: z.nativeEnum(SubmissionStatus),
-});
 
 @Injectable()
 export class SubmissionsService {
   constructor(
-    @Inject('CORRECTIONS_SERVICE')
-    private readonly correctionsService: ClientKafkaProxy,
+    private readonly correctionsService: CorrectionsService,
 
     @InjectRepository(Challenge)
     private readonly challengesRepository: Repository<Challenge>,
@@ -89,26 +82,10 @@ export class SubmissionsService {
     repositoryUrl: string;
   }): Promise<Submission> {
     const submission = await this.create({ challengeId, repositoryUrl });
-
-    let possibleCorrection: unknown;
-
-    try {
-      possibleCorrection = await new Promise((resolve, reject) => {
-        this.correctionsService
-          .send('challenge.correction', {
-            submissionId: submission.id,
-            repositoryUrl: submission.repositoryUrl,
-          })
-          .subscribe({
-            next: resolve,
-            error: reject,
-          });
-      });
-    } catch {
-      throw new Error('Error while connecting to the corrections service.');
-    }
-
-    const correction = CorrectionResponseSchema.parse(possibleCorrection);
+    const correction = await this.correctionsService.send({
+      submissionId: submission.id,
+      repositoryUrl: submission.repositoryUrl,
+    });
 
     this.submissionsRepository.merge(submission, {
       status: correction.status,
