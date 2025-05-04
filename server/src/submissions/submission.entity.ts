@@ -57,5 +57,5 @@ export class Submission {
     createForeignKeyConstraints: false,
   })
   @JoinColumn({ name: 'challengeId' })
-  challenge?: Challenge;
+  challenge?: Challenge | null;
 }

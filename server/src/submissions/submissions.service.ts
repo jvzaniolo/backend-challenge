@@ -9,7 +9,6 @@ import { GetSubmissionArgs } from './dto/get-submissions.args';
 import { Submission, SubmissionStatus } from './submission.entity';
 
 const CorrectionResponseSchema = z.object({
-  repositoryUrl: z.string(),
   grade: z.number(),
   status: z.nativeEnum(SubmissionStatus),
 });
@@ -91,11 +90,11 @@ export class SubmissionsService {
   }): Promise<Submission> {
     const submission = await this.create({ challengeId, repositoryUrl });
 
-    let correction: unknown;
+    let possibleCorrection: unknown;
 
     try {
-      correction = await new Promise((resolve, reject) => {
-        return this.correctionsService
+      possibleCorrection = await new Promise((resolve, reject) => {
+        this.correctionsService
           .send('challenge.correction', {
             submissionId: submission.id,
             repositoryUrl: submission.repositoryUrl,
@@ -109,17 +108,11 @@ export class SubmissionsService {
       throw new Error('Error while connecting to the corrections service.');
     }
 
-    const parsedCorrection = CorrectionResponseSchema.safeParse(correction);
-
-    if (!parsedCorrection.success) {
-      throw new Error('Invalid response from the corrections service.');
-    }
-
-    const { status, grade } = parsedCorrection.data;
+    const correction = CorrectionResponseSchema.parse(possibleCorrection);
 
     this.submissionsRepository.merge(submission, {
-      status,
-      grade,
+      status: correction.status,
+      grade: correction.grade,
     });
 
     return this.submissionsRepository.save(submission);
