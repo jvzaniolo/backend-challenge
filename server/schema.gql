@@ -65,5 +65,5 @@ enum SubmissionStatus {
   Pending
 }
 
-"""A simple UUID parser"""
+"""UUID custom scalar type"""
 scalar UUID
