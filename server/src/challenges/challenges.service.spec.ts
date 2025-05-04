@@ -78,6 +78,9 @@ describe('ChallengesService', () => {
           title: ILike(`%${title}%`),
           description: undefined,
         },
+        relations: {
+          submissions: true,
+        },
       });
       expect(result).toEqual([
         expect.objectContaining({
@@ -103,6 +106,9 @@ describe('ChallengesService', () => {
           title: undefined,
           description: ILike(`%${description}%`),
         },
+        relations: {
+          submissions: true,
+        },
       });
       expect(result).toEqual([
         expect.objectContaining({
@@ -126,6 +132,9 @@ describe('ChallengesService', () => {
         where: {
           title: undefined,
           description: undefined,
+        },
+        relations: {
+          submissions: true,
         },
       });
       expect(result).toEqual([

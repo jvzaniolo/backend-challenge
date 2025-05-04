@@ -19,6 +19,9 @@ export class ChallengesService {
         title: title ? ILike(`%${title}%`) : undefined,
         description: description ? ILike(`%${description}%`) : undefined,
       },
+      relations: {
+        submissions: true,
+      },
     });
   }
 
