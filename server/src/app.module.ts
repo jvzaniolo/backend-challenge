@@ -2,6 +2,7 @@ import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { Module } from '@nestjs/common';
 import { GraphQLModule } from '@nestjs/graphql';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { CustomUuidScalar } from './@core/scalar/uuid.scalar';
 import { ChallengesModule } from './challenges/challenges.module';
 import { SubmissionsModule } from './submissions/submissions.module';
 
@@ -12,6 +13,9 @@ import { SubmissionsModule } from './submissions/submissions.module';
       autoSchemaFile: 'schema.gql',
       sortSchema: true,
       graphiql: true,
+      resolvers: {
+        UUID: CustomUuidScalar,
+      },
     }),
     TypeOrmModule.forRoot({
       type: 'postgres',

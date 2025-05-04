@@ -1,11 +1,12 @@
-import { Field, ID, ObjectType } from '@nestjs/graphql';
+import { Field, ObjectType } from '@nestjs/graphql';
 import { Column, CreateDateColumn, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { CustomUuidScalar } from '~/@core/scalar/uuid.scalar';
 import { Submission } from '~/submissions/submission.entity';
 
 @Entity()
 @ObjectType()
 export class Challenge {
-  @Field(() => ID)
+  @Field(() => CustomUuidScalar)
   @PrimaryGeneratedColumn('uuid')
   id: string;
 

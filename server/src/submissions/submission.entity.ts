@@ -1,4 +1,4 @@
-import { Field, Float, ID, ObjectType, registerEnumType } from '@nestjs/graphql';
+import { Field, Float, ObjectType, registerEnumType } from '@nestjs/graphql';
 import {
   Column,
   CreateDateColumn,
@@ -7,6 +7,7 @@ import {
   ManyToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
+import { CustomUuidScalar } from '~/@core/scalar/uuid.scalar';
 import { Challenge } from '~/challenges/challenge.entity';
 
 export enum SubmissionStatus {
@@ -27,11 +28,11 @@ registerEnumType(SubmissionStatus, {
 @Entity()
 @ObjectType()
 export class Submission {
-  @Field(() => ID)
+  @Field(() => CustomUuidScalar)
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @Field(() => ID)
+  @Field(() => CustomUuidScalar)
   @Column()
   challengeId: string;
 

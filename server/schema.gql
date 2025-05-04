@@ -5,7 +5,7 @@
 type Challenge {
   createdAt: DateTime!
   description: String!
-  id: ID!
+  id: UUID!
   submissions: [Submission!]
   title: String!
 }
@@ -49,10 +49,10 @@ type Query {
 
 type Submission {
   challenge: Challenge
-  challengeId: ID!
+  challengeId: UUID!
   createdAt: DateTime!
   grade: Float
-  id: ID!
+  id: UUID!
   repositoryUrl: String!
   status: SubmissionStatus!
 }
@@ -64,3 +64,6 @@ enum SubmissionStatus {
   """The default status."""
   Pending
 }
+
+"""A simple UUID parser"""
+scalar UUID
