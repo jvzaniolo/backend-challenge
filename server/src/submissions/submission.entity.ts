@@ -1,5 +1,4 @@
 import { Field, Float, ID, ObjectType, registerEnumType } from '@nestjs/graphql';
-import { Challenge } from 'src/challenges/challenge.entity';
 import {
   Column,
   CreateDateColumn,
@@ -8,6 +7,7 @@ import {
   ManyToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
+import { Challenge } from '~/challenges/challenge.entity';
 
 export enum SubmissionStatus {
   Pending = 'Pending',

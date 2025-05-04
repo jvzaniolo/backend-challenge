@@ -1,6 +1,6 @@
 import { Field, ID, ObjectType } from '@nestjs/graphql';
-import { Submission } from 'src/submissions/submission.entity';
 import { Column, CreateDateColumn, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { Submission } from '~/submissions/submission.entity';
 
 @Entity()
 @ObjectType()

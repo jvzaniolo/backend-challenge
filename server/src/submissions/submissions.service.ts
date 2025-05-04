@@ -1,9 +1,9 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { ClientKafkaProxy } from '@nestjs/microservices';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Challenge } from 'src/challenges/challenge.entity';
 import { Between, ILike, Repository } from 'typeorm';
 import { z } from 'zod';
+import { Challenge } from '~/challenges/challenge.entity';
 import { GetSubmissionArgs } from './dto/get-submissions.args';
 import { Submission, SubmissionStatus } from './submission.entity';
 
