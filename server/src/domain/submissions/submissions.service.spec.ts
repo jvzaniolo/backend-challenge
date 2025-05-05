@@ -2,7 +2,7 @@ import { ClientKafkaProxy } from '@nestjs/microservices';
 import { Test } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { Challenge } from '~/challenges/challenge.entity';
+import { Challenge } from '~/domain/challenges/challenge.entity';
 import { Submission, SubmissionStatus } from './submission.entity';
 import { SubmissionsService } from './submissions.service';
 

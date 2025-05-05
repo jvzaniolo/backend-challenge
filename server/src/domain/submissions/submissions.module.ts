@@ -1,7 +1,7 @@
 import { Inject, Module, OnModuleDestroy, OnModuleInit } from '@nestjs/common';
 import { ClientKafka, ClientsModule, Transport } from '@nestjs/microservices';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { Challenge } from '~/challenges/challenge.entity';
+import { Challenge } from '../challenges/challenge.entity';
 import { Submission } from './submission.entity';
 import { SubmissionsController } from './submissions.controller';
 import { SubmissionsResolver } from './submissions.resolver';

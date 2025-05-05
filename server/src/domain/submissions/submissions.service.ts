@@ -2,8 +2,8 @@ import { Inject, Injectable } from '@nestjs/common';
 import { ClientKafkaProxy } from '@nestjs/microservices';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Between, ILike, Repository } from 'typeorm';
-import { isGithubRepo } from '~/@core/utils/is-github-repo';
-import { Challenge } from '~/challenges/challenge.entity';
+import { isGithubRepo } from '~/common/utils/is-github-repo';
+import { Challenge } from '~/domain/challenges/challenge.entity';
 import { GetSubmissionArgs } from './dto/get-submissions.args';
 import { PaginatedSubmissions, Submission, SubmissionStatus } from './submission.entity';
 

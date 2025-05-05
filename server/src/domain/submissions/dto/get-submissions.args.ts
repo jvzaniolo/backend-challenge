@@ -1,7 +1,15 @@
-import { ArgsType, Field } from '@nestjs/graphql';
-import { PaginationArgs } from '~/@core/dto/pagination.args';
+import { ArgsType, Field, InputType } from '@nestjs/graphql';
+import { PaginationArgs } from '~/common/pagination/pagination.args';
 import { SubmissionStatus } from '../submission.entity';
-import { DateRangeArgs } from './date-range.args';
+
+@InputType()
+class DateRangeArgs {
+  @Field()
+  startDate: Date;
+
+  @Field()
+  endDate: Date;
+}
 
 @ArgsType()
 export class GetSubmissionArgs extends PaginationArgs {

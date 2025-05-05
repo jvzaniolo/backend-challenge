@@ -7,9 +7,9 @@ import {
   ManyToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
-import { Pagination } from '~/@core/dto/pagination.type';
-import { CustomUuidScalar } from '~/@core/scalar/uuid.scalar';
-import { Challenge } from '~/challenges/challenge.entity';
+import { Pagination } from '~/common/pagination/pagination.type';
+import { CustomUuidScalar } from '~/common/scalar/uuid.scalar';
+import { Challenge } from '~/domain/challenges/challenge.entity';
 
 export enum SubmissionStatus {
   Pending = 'Pending',
