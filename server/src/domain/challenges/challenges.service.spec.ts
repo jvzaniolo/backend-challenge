@@ -2,8 +2,8 @@ import { Test } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { randomUUID } from 'node:crypto';
 import { Repository } from 'typeorm';
-import { Challenge } from './challenge.entity';
 import { ChallengesService } from './challenges.service';
+import { Challenge } from './entities/challenge.entity';
 
 const challengesArray = [
   {
@@ -126,17 +126,6 @@ describe('ChallengesService', () => {
         ],
         pagination: { total: 2, page, perPage },
       });
-    });
-  });
-
-  describe('create()', () => {
-    it('should successfully insert a challenge', async () => {
-      await expect(
-        service.create({
-          title: 'Back-end Challenge',
-          description: 'This is a back-end challenge',
-        }),
-      ).resolves.toEqual(expect.objectContaining(oneChallenge));
     });
   });
 

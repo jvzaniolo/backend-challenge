@@ -1,8 +1,8 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ILike, Repository } from 'typeorm';
-import { Challenge, PaginatedChallenge } from './challenge.entity';
 import { GetChallengesArgs } from './dto/get-challenges.args';
+import { Challenge, PaginatedChallenge } from './entities/challenge.entity';
 
 @Injectable()
 export class ChallengesService {
@@ -37,14 +37,6 @@ export class ChallengesService {
         perPage,
       },
     };
-  }
-
-  create({ title, description }: { title: string; description: string }): Promise<Challenge> {
-    const challenge = this.challengeRepository.create({
-      title,
-      description,
-    });
-    return this.challengeRepository.save(challenge);
   }
 
   async update(

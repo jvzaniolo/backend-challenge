@@ -1,7 +1,7 @@
 import { Inject, Module, OnModuleDestroy, OnModuleInit } from '@nestjs/common';
 import { ClientKafka, ClientsModule, Transport } from '@nestjs/microservices';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { Challenge } from '../challenges/challenge.entity';
+import { Challenge } from '../challenges/entities/challenge.entity';
 import { Submission } from './submission.entity';
 import { SubmissionsController } from './submissions.controller';
 import { SubmissionsResolver } from './submissions.resolver';
@@ -36,7 +36,7 @@ export class SubmissionsModule implements OnModuleInit, OnModuleDestroy {
 
   async onModuleInit() {
     this.client.subscribeToResponseOf('challenge.correction');
-    await this.client.connect();
+    // await this.client.connect();
   }
 
   async onModuleDestroy() {

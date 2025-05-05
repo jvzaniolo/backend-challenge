@@ -1,7 +1,7 @@
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
-import { Challenge, PaginatedChallenge } from './challenge.entity';
 import { ChallengesService } from './challenges.service';
 import { GetChallengesArgs } from './dto/get-challenges.args';
+import { Challenge, PaginatedChallenge } from './entities/challenge.entity';
 
 @Resolver(() => Challenge)
 export class ChallengesResolver {
@@ -10,14 +10,6 @@ export class ChallengesResolver {
   @Query(() => PaginatedChallenge)
   async challenges(@Args() filters: GetChallengesArgs): Promise<PaginatedChallenge> {
     return this.challengesService.findMany(filters);
-  }
-
-  @Mutation(() => Challenge)
-  async createChallenge(
-    @Args('title') title: string,
-    @Args('description') description: string,
-  ): Promise<Challenge> {
-    return this.challengesService.create({ title, description });
   }
 
   @Mutation(() => Challenge)
