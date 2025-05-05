@@ -1,5 +1,5 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { ClientKafkaProxy } from '@nestjs/microservices';
+import { ClientKafka } from '@nestjs/microservices';
 import { z } from 'zod';
 import { SubmissionStatus } from '~/submissions/submission.entity';
 
@@ -13,7 +13,7 @@ const CorrectionResponseSchema = z.object({
 export class CorrectionsService {
   constructor(
     @Inject('CORRECTIONS_SERVICE')
-    private readonly correctionsService: ClientKafkaProxy,
+    private readonly correctionsService: ClientKafka,
   ) {}
 
   /**

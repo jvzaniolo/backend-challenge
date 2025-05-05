@@ -18,9 +18,6 @@ describe('CorrectionsService', () => {
         {
           provide: 'CORRECTIONS_SERVICE',
           useValue: {
-            subscribeToResponseOf: jest.fn(),
-            connect: jest.fn(),
-            close: jest.fn(),
             send: jest.fn().mockReturnValue({
               subscribe: jest.fn().mockImplementation((callback) => {
                 callback.next(correction);

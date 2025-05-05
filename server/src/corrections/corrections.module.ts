@@ -1,5 +1,5 @@
 import { Inject, Module, OnModuleDestroy, OnModuleInit } from '@nestjs/common';
-import { ClientKafkaProxy, ClientsModule, Transport } from '@nestjs/microservices';
+import { ClientKafka, ClientsModule, Transport } from '@nestjs/microservices';
 import { CorrectionsService } from './corrections.service';
 
 @Module({
@@ -25,7 +25,7 @@ import { CorrectionsService } from './corrections.service';
 export class CorrectionsModule implements OnModuleInit, OnModuleDestroy {
   constructor(
     @Inject('CORRECTIONS_SERVICE')
-    private readonly client: ClientKafkaProxy,
+    private readonly client: ClientKafka,
   ) {}
 
   async onModuleInit() {
@@ -33,7 +33,7 @@ export class CorrectionsModule implements OnModuleInit, OnModuleDestroy {
     await this.client.connect();
   }
 
-  onModuleDestroy() {
-    this.client.close();
+  async onModuleDestroy() {
+    await this.client.close();
   }
 }
