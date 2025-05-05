@@ -13,15 +13,6 @@ export class ChallengesResolver {
   }
 
   @Mutation(() => Challenge)
-  async updateChallenge(
-    @Args('id') id: string,
-    @Args('title', { nullable: true }) title?: string,
-    @Args('description', { nullable: true }) description?: string,
-  ): Promise<Challenge> {
-    return this.challengesService.update(id, { title, description });
-  }
-
-  @Mutation(() => Challenge)
   async deleteChallenge(@Args('id') id: string): Promise<Challenge> {
     return this.challengesService.delete(id);
   }

@@ -39,21 +39,6 @@ export class ChallengesService {
     };
   }
 
-  async update(
-    id: string,
-    { title, description }: { title?: string; description?: string },
-  ): Promise<Challenge> {
-    const challenge = await this.challengeRepository.findOneBy({ id });
-    if (!challenge) {
-      throw new NotFoundException('Challenge not found');
-    }
-    this.challengeRepository.merge(challenge, {
-      title,
-      description,
-    });
-    return await this.challengeRepository.save(challenge);
-  }
-
   async delete(id: string): Promise<Challenge> {
     const challenge = await this.challengeRepository.findOneBy({ id });
     if (!challenge) {

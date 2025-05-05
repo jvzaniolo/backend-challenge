@@ -129,48 +129,6 @@ describe('ChallengesService', () => {
     });
   });
 
-  describe('update()', () => {
-    it('should update a challenge', async () => {
-      const mergeSpy = jest.spyOn(repository, 'merge');
-      jest.spyOn(repository, 'save').mockResolvedValue({
-        id: '1',
-        title: 'Updated Title',
-        description: 'Updated Description',
-        createdAt: new Date(),
-      });
-      const returnValue = await service.update('1', {
-        title: 'Updated Title',
-        description: 'Updated Description',
-      });
-
-      expect(mergeSpy).toHaveBeenCalledWith(oneChallenge, {
-        title: 'Updated Title',
-        description: 'Updated Description',
-      });
-      expect(returnValue).toEqual(
-        expect.objectContaining({
-          title: 'Updated Title',
-          description: 'Updated Description',
-        }),
-      );
-    });
-
-    it('should throw an error when trying to update a non-existing challenge', async () => {
-      const mergeSpy = jest.spyOn(repository, 'merge');
-      const findOneBySpy = jest.spyOn(repository, 'findOneBy').mockResolvedValue(null);
-
-      await expect(
-        service.update('1', {
-          title: 'Updated Title',
-          description: 'Updated Description',
-        }),
-      ).rejects.toThrow('Challenge not found');
-
-      expect(mergeSpy).not.toHaveBeenCalled();
-      expect(findOneBySpy).toHaveBeenCalledWith({ id: '1' });
-    });
-  });
-
   describe('delete()', () => {
     it('should call delete with the passed value', async () => {
       const deleteSpy = jest.spyOn(repository, 'delete');

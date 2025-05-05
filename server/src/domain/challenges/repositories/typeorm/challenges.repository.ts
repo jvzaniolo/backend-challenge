@@ -14,4 +14,33 @@ export class ChallengesRepository {
     const challenge = this.challengeRepository.create(input);
     return this.challengeRepository.save(challenge);
   }
+
+  async update({
+    id,
+    title,
+    description,
+  }: {
+    id: string;
+    title?: string;
+    description?: string;
+  }): Promise<Challenge | null> {
+    const challenge = await this.challengeRepository.findOneBy({ id });
+    if (!challenge) {
+      return null;
+    }
+    this.challengeRepository.merge(challenge, {
+      title,
+      description,
+    });
+    return this.challengeRepository.save(challenge);
+  }
+
+  async delete({ id }: { id: string }): Promise<Challenge | null> {
+    const challenge = await this.challengeRepository.findOneBy({ id });
+    if (!challenge) {
+      return null;
+    }
+    await this.challengeRepository.delete(id);
+    return challenge;
+  }
 }
