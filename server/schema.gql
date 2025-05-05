@@ -1,0 +1,69 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type Challenge {
+  createdAt: DateTime!
+  description: String!
+  id: UUID!
+  submissions: [Submission!]
+  title: String!
+}
+
+input DateRangeArgs {
+  endDate: DateTime!
+  startDate: DateTime!
+}
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
+type Mutation {
+  createChallenge(description: String!, title: String!): Challenge!
+  deleteChallenge(id: String!): Challenge!
+  submitChallenge(challengeId: String!, repositoryUrl: String!): Submission!
+  updateChallenge(description: String, id: String!, title: String): Challenge!
+}
+
+type Query {
+  challenges(
+    description: String
+    page: Int
+
+    """Defaults to 10."""
+    perPage: Int = 10
+    title: String
+  ): [Challenge!]!
+  submissions(
+    challengeTitle: String
+    dateRange: DateRangeArgs
+    page: Int
+
+    """Defaults to 10."""
+    perPage: Int = 10
+    status: SubmissionStatus
+  ): [Submission!]!
+}
+
+type Submission {
+  challenge: Challenge
+  challengeId: UUID!
+  createdAt: DateTime!
+  grade: Float
+  id: UUID!
+  repositoryUrl: String!
+  status: SubmissionStatus!
+}
+
+enum SubmissionStatus {
+  Done
+  Error
+
+  """The default status."""
+  Pending
+}
+
+"""UUID custom scalar type"""
+scalar UUID
