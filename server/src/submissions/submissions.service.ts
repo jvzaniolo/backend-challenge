@@ -5,7 +5,7 @@ import { Between, ILike, Repository } from 'typeorm';
 import { isGithubRepo } from '~/@core/utils/is-github-repo';
 import { Challenge } from '~/challenges/challenge.entity';
 import { GetSubmissionArgs } from './dto/get-submissions.args';
-import { Submission, SubmissionStatus } from './submission.entity';
+import { PaginatedSubmissions, Submission, SubmissionStatus } from './submission.entity';
 
 @Injectable()
 export class SubmissionsService {
@@ -20,14 +20,14 @@ export class SubmissionsService {
     private readonly submissionsRepository: Repository<Submission>,
   ) {}
 
-  findMany({
+  async findMany({
     page,
     perPage,
     status,
     dateRange,
     challengeTitle,
-  }: GetSubmissionArgs): Promise<Submission[]> {
-    return this.submissionsRepository.find({
+  }: GetSubmissionArgs): Promise<PaginatedSubmissions> {
+    const [items, count] = await this.submissionsRepository.findAndCount({
       skip: page ? (page - 1) * perPage : 0,
       take: perPage,
       where: {
@@ -41,6 +41,15 @@ export class SubmissionsService {
         challenge: true,
       },
     });
+
+    return {
+      items,
+      pagination: {
+        page: page || 1,
+        perPage,
+        total: count,
+      },
+    };
   }
 
   private async create({

@@ -7,6 +7,7 @@ import {
   ManyToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
+import { Pagination } from '~/@core/dto/pagination.type';
 import { CustomUuidScalar } from '~/@core/scalar/uuid.scalar';
 import { Challenge } from '~/challenges/challenge.entity';
 
@@ -59,4 +60,13 @@ export class Submission {
   })
   @JoinColumn({ name: 'challengeId' })
   challenge?: Challenge | null;
+}
+
+@ObjectType()
+export class PaginatedSubmissions {
+  @Field(() => [Submission])
+  items: Submission[];
+
+  @Field(() => Pagination)
+  pagination: Pagination;
 }

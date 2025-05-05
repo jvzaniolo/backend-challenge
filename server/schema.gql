@@ -27,6 +27,26 @@ type Mutation {
   updateChallenge(description: String, id: String!, title: String): Challenge!
 }
 
+type PaginatedChallenge {
+  items: [Challenge!]!
+  pagination: Pagination!
+}
+
+type PaginatedSubmissions {
+  items: [Submission!]!
+  pagination: Pagination!
+}
+
+type Pagination {
+  page: Int!
+
+  """Number of items per page"""
+  perPage: Int!
+
+  """Total number of items"""
+  total: Int!
+}
+
 type Query {
   challenges(
     description: String
@@ -35,7 +55,7 @@ type Query {
     """Defaults to 10."""
     perPage: Int = 10
     title: String
-  ): [Challenge!]!
+  ): PaginatedChallenge!
   submissions(
     challengeTitle: String
     dateRange: DateRangeArgs
@@ -44,7 +64,7 @@ type Query {
     """Defaults to 10."""
     perPage: Int = 10
     status: SubmissionStatus
-  ): [Submission!]!
+  ): PaginatedSubmissions!
 }
 
 type Submission {

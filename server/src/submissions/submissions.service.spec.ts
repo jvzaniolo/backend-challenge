@@ -44,7 +44,7 @@ describe('SubmissionsService', () => {
         {
           provide: getRepositoryToken(Submission),
           useValue: {
-            find: jest.fn().mockResolvedValue(submissions),
+            findAndCount: jest.fn().mockResolvedValue([submissions, submissions.length]),
             create: jest.fn().mockReturnValue(submissions[0]),
             save: jest.fn().mockResolvedValue(submissions[0]),
             update: jest.fn(),
@@ -139,39 +139,56 @@ describe('SubmissionsService', () => {
     it('should return all submissions', async () => {
       const result = await service.findMany({ perPage: 10 });
 
-      expect(result).toEqual(submissions);
+      expect(result).toEqual({
+        items: submissions,
+        pagination: {
+          page: 1,
+          perPage: 10,
+          total: submissions.length,
+        },
+      });
     });
 
     it('should return an empty array if there are no submissions', async () => {
-      jest.spyOn(repository, 'find').mockResolvedValueOnce([]);
+      jest.spyOn(repository, 'findAndCount').mockResolvedValueOnce([[], 0]);
 
       const result = await service.findMany({ perPage: 10 });
 
-      expect(result).toEqual([]);
+      expect(result).toEqual({ items: [], pagination: { page: 1, perPage: 10, total: 0 } });
     });
 
     it('should filter submissions by challenge title', async () => {
       const challengeTitle = 'Challenge 1';
       jest
-        .spyOn(repository, 'find')
-        .mockResolvedValueOnce(
+        .spyOn(repository, 'findAndCount')
+        .mockResolvedValueOnce([
           submissions.filter((submission) => submission.challenge?.title.includes(challengeTitle)),
-        );
+          1,
+        ]);
 
       const result = await service.findMany({ challengeTitle, perPage: 10 });
 
-      expect(result).toEqual([submissions[0]]);
+      expect(result).toEqual({
+        items: [submissions[0]],
+        pagination: { page: 1, perPage: 10, total: 1 },
+      });
     });
 
     it('should filter submissions by status', async () => {
       const status = SubmissionStatus.Error;
       jest
-        .spyOn(repository, 'find')
-        .mockResolvedValueOnce(submissions.filter((submission) => submission.status === status));
+        .spyOn(repository, 'findAndCount')
+        .mockResolvedValueOnce([
+          submissions.filter((submission) => submission.status === status),
+          1,
+        ]);
 
       const result = await service.findMany({ status, perPage: 10 });
 
-      expect(result).toEqual([submissions[1]]);
+      expect(result).toEqual({
+        items: [submissions[1]],
+        pagination: { page: 1, perPage: 10, total: 1 },
+      });
     });
 
     it('should filter submissions by date range', async () => {
@@ -180,29 +197,38 @@ describe('SubmissionsService', () => {
         endDate: new Date('2025-05-02'),
       };
       jest
-        .spyOn(repository, 'find')
-        .mockResolvedValueOnce(
+        .spyOn(repository, 'findAndCount')
+        .mockResolvedValueOnce([
           submissions.filter(
             (submission) =>
               submission.createdAt >= dateRange.startDate &&
               submission.createdAt <= dateRange.endDate,
           ),
-        );
+          1,
+        ]);
 
       const result = await service.findMany({ dateRange, perPage: 10 });
 
-      expect(result).toEqual([submissions[0]]);
+      expect(result).toEqual({
+        items: [submissions[0]],
+        pagination: { page: 1, perPage: 10, total: 1 },
+      });
     });
 
     it('should paginate the results', async () => {
       const page = 2;
       const perPage = 1;
       const skip = (page - 1) * perPage;
-      jest.spyOn(repository, 'find').mockResolvedValueOnce(submissions.slice(skip, page * perPage));
+      jest
+        .spyOn(repository, 'findAndCount')
+        .mockResolvedValueOnce([submissions.slice(skip, page * perPage), submissions.length]);
 
       const result = await service.findMany({ page, perPage });
 
-      expect(result).toEqual([submissions[1]]);
+      expect(result).toEqual({
+        items: [submissions[1]],
+        pagination: { page, perPage, total: submissions.length },
+      });
     });
   });
 });
