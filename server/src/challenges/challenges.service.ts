@@ -1,7 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ILike, Repository } from 'typeorm';
-import { Challenge } from './challenge.entity';
+import { Challenge, PaginatedChallenge } from './challenge.entity';
 import { GetChallengesArgs } from './dto/get-challenges.args';
 
 @Injectable()
@@ -11,8 +11,13 @@ export class ChallengesService {
     private readonly challengeRepository: Repository<Challenge>,
   ) {}
 
-  findMany({ title, description, page, perPage }: GetChallengesArgs): Promise<Challenge[]> {
-    return this.challengeRepository.find({
+  async findMany({
+    title,
+    description,
+    page,
+    perPage,
+  }: GetChallengesArgs): Promise<PaginatedChallenge> {
+    const [items, count] = await this.challengeRepository.findAndCount({
       skip: page ? (page - 1) * perPage : undefined,
       take: perPage,
       where: {
@@ -23,6 +28,15 @@ export class ChallengesService {
         submissions: true,
       },
     });
+
+    return {
+      items,
+      pagination: {
+        total: count,
+        page: page || 1,
+        perPage,
+      },
+    };
   }
 
   create({ title, description }: { title: string; description: string }): Promise<Challenge> {

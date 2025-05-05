@@ -1,7 +1,7 @@
 import { Test } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { randomUUID } from 'node:crypto';
-import { ILike, Repository } from 'typeorm';
+import { Repository } from 'typeorm';
 import { Challenge } from './challenge.entity';
 import { ChallengesService } from './challenges.service';
 
@@ -39,7 +39,7 @@ describe('ChallengesService', () => {
           provide: getRepositoryToken(Challenge),
           useValue: {
             create: jest.fn().mockResolvedValue(oneChallenge),
-            find: jest.fn().mockResolvedValue(challengesArray),
+            findAndCount: jest.fn().mockResolvedValue([challengesArray, challengesArray.length]),
             save: jest.fn().mockResolvedValue(oneChallenge),
             findOneBy: jest.fn().mockResolvedValue(oneChallenge),
             delete: jest.fn(),
@@ -61,88 +61,71 @@ describe('ChallengesService', () => {
     it('should return an array of challenges', async () => {
       const result = await service.findMany({ perPage: 10 });
 
-      expect(result).toEqual(challengesArray);
+      expect(result).toEqual({
+        items: challengesArray,
+        pagination: { total: challengesArray.length, page: 1, perPage: 10 },
+      });
     });
 
     it('should filter challenges by title', async () => {
       const title = 'Back-end Challenge';
-      const findSpy = jest
-        .spyOn(repository, 'find')
-        .mockResolvedValue(challengesArray.filter((challenge) => challenge.title.includes(title)));
+      jest
+        .spyOn(repository, 'findAndCount')
+        .mockResolvedValue([
+          challengesArray.filter((challenge) => challenge.title.includes(title)),
+          1,
+        ]);
       const result = await service.findMany({ title, perPage: 10 });
 
-      expect(findSpy).toHaveBeenCalledWith({
-        skip: undefined,
-        take: 10,
-        where: {
-          title: ILike(`%${title}%`),
-          description: undefined,
-        },
-        relations: {
-          submissions: true,
-        },
+      expect(result).toEqual({
+        items: [
+          expect.objectContaining({
+            title: 'Back-end Challenge',
+            description: 'This is a back-end challenge',
+          }),
+        ],
+        pagination: { total: 1, page: 1, perPage: 10 },
       });
-      expect(result).toEqual([
-        expect.objectContaining({
-          title: 'Back-end Challenge',
-          description: 'This is a back-end challenge',
-        }),
-      ]);
     });
 
     it('should filter challenges by description', async () => {
       const description = 'front-end';
-      const findSpy = jest
-        .spyOn(repository, 'find')
-        .mockResolvedValue(
+      jest
+        .spyOn(repository, 'findAndCount')
+        .mockResolvedValue([
           challengesArray.filter((challenge) => challenge.description.includes(description)),
-        );
+          1,
+        ]);
       const result = await service.findMany({ description, perPage: 10 });
 
-      expect(findSpy).toHaveBeenCalledWith({
-        skip: undefined,
-        take: 10,
-        where: {
-          title: undefined,
-          description: ILike(`%${description}%`),
-        },
-        relations: {
-          submissions: true,
-        },
+      expect(result).toEqual({
+        items: [
+          expect.objectContaining({
+            title: 'Front-end Challenge',
+            description: 'This is a front-end challenge',
+          }),
+        ],
+        pagination: { total: 1, page: 1, perPage: 10 },
       });
-      expect(result).toEqual([
-        expect.objectContaining({
-          title: 'Front-end Challenge',
-          description: 'This is a front-end challenge',
-        }),
-      ]);
     });
 
     it('should paginate results', async () => {
       const page = 2;
       const perPage = 1;
-      const findSpy = jest
-        .spyOn(repository, 'find')
-        .mockResolvedValue(challengesArray.slice((page - 1) * perPage, page * perPage));
+      jest
+        .spyOn(repository, 'findAndCount')
+        .mockResolvedValue([challengesArray.slice((page - 1) * perPage, page * perPage), 2]);
       const result = await service.findMany({ page, perPage });
 
-      expect(findSpy).toHaveBeenCalledWith({
-        skip: (page - 1) * perPage,
-        take: perPage,
-        where: {
-          title: undefined,
-          description: undefined,
-        },
-        relations: {
-          submissions: true,
-        },
+      expect(result).toEqual({
+        items: [
+          expect.objectContaining({
+            title: 'Front-end Challenge',
+            description: 'This is a front-end challenge',
+          }),
+        ],
+        pagination: { total: 2, page, perPage },
       });
-      expect(result).toEqual([
-        expect.objectContaining({
-          title: 'Front-end Challenge',
-          description: 'This is a front-end challenge',
-        }),
-      ]);
     });
   });
 
