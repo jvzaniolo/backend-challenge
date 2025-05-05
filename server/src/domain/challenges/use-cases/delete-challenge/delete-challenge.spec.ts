@@ -32,12 +32,30 @@ describe('Delete challenge use case', () => {
       description: 'This is a back-end challenge',
     });
 
-    const { challenge } = await sut.execute({
+    await expect(
+      challengesRepository.findMany({
+        title: 'Back-end Challenge',
+        perPage: 10,
+      }),
+    ).resolves.toEqual([newChallenge]);
+
+    await sut.execute({
       id: newChallenge.id,
     });
 
-    expect(challenge).toBeDefined();
-    expect(challenge.title).toBe('Full-stack Challenge');
-    expect(challenge.description).toBe('This is a full-stack challenge');
+    await expect(
+      challengesRepository.findMany({
+        title: 'Back-end Challenge',
+        perPage: 10,
+      }),
+    ).resolves.toEqual([]);
+  });
+
+  it('should throw an error if the challenge does not exist', async () => {
+    await expect(
+      sut.execute({
+        id: 'non-existing-id',
+      }),
+    ).rejects.toThrow('Challenge not found');
   });
 });
