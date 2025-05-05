@@ -1,16 +1,17 @@
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
+import { ClientKafkaProxy } from '@nestjs/microservices';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Between, ILike, Repository } from 'typeorm';
 import { isGithubRepo } from '~/@core/utils/is-github-repo';
 import { Challenge } from '~/challenges/challenge.entity';
-import { CorrectionsService } from '~/corrections/corrections.service';
 import { GetSubmissionArgs } from './dto/get-submissions.args';
 import { Submission, SubmissionStatus } from './submission.entity';
 
 @Injectable()
 export class SubmissionsService {
   constructor(
-    private readonly correctionsService: CorrectionsService,
+    @Inject('SUBMISSION_KAFKA')
+    private readonly submissionKafkaClient: ClientKafkaProxy,
 
     @InjectRepository(Challenge)
     private readonly challengesRepository: Repository<Challenge>,
@@ -74,6 +75,29 @@ export class SubmissionsService {
     return submission;
   }
 
+  async update({
+    submissionId,
+    status,
+    grade,
+  }: {
+    submissionId: string;
+    status: SubmissionStatus;
+    grade: number;
+  }): Promise<Submission | null> {
+    const submission = await this.submissionsRepository.findOneBy({ id: submissionId });
+
+    if (!submission) {
+      throw new Error('Submission not found.');
+    }
+
+    this.submissionsRepository.merge(submission, {
+      status,
+      grade,
+    });
+
+    return this.submissionsRepository.save(submission);
+  }
+
   async submitChallenge({
     challengeId,
     repositoryUrl,
@@ -82,15 +106,13 @@ export class SubmissionsService {
     repositoryUrl: string;
   }): Promise<Submission> {
     const submission = await this.create({ challengeId, repositoryUrl });
-    const correction = await this.correctionsService.send({
-      submissionId: submission.id,
-      repositoryUrl: submission.repositoryUrl,
-    });
 
-    this.submissionsRepository.merge(submission, {
-      status: correction.status,
-      grade: correction.grade,
-    });
+    this.submissionKafkaClient
+      .send('challenge.correction', {
+        submissionId: submission.id,
+        repositoryUrl: submission.repositoryUrl,
+      })
+      .subscribe();
 
     return this.submissionsRepository.save(submission);
   }

@@ -1,8 +1,8 @@
+import { ClientKafkaProxy } from '@nestjs/microservices';
 import { Test } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Challenge } from '~/challenges/challenge.entity';
-import { CorrectionsService } from '~/corrections/corrections.service';
 import { Submission, SubmissionStatus } from './submission.entity';
 import { SubmissionsService } from './submissions.service';
 
@@ -35,6 +35,7 @@ const submissions: Submission[] = [
 describe('SubmissionsService', () => {
   let service: SubmissionsService;
   let repository: Repository<Submission>;
+  let submissionKafkaClient: ClientKafkaProxy;
 
   beforeEach(async () => {
     const module = await Test.createTestingModule({
@@ -61,11 +62,10 @@ describe('SubmissionsService', () => {
           },
         },
         {
-          provide: CorrectionsService,
+          provide: 'SUBMISSION_KAFKA',
           useValue: {
             send: jest.fn().mockReturnValue({
-              status: 'Done',
-              grade: 10,
+              subscribe: jest.fn().mockImplementation(),
             }),
           },
         },
@@ -74,6 +74,7 @@ describe('SubmissionsService', () => {
 
     service = module.get(SubmissionsService);
     repository = module.get(getRepositoryToken(Submission));
+    submissionKafkaClient = module.get('SUBMISSION_KAFKA');
   });
 
   it('should be defined', () => {
@@ -118,8 +119,8 @@ describe('SubmissionsService', () => {
       });
     });
 
-    it('should update the submission with the correction result', async () => {
-      const saveSpy = jest.spyOn(repository, 'save');
+    it('should send a message to corrections microservice', async () => {
+      const sendSpy = jest.spyOn(submissionKafkaClient, 'send');
 
       const result = await service.submitChallenge({
         challengeId: '1',
@@ -127,13 +128,10 @@ describe('SubmissionsService', () => {
       });
 
       expect(result).toEqual(submissions[0]);
-      expect(saveSpy).toHaveBeenCalledWith(
-        expect.objectContaining({
-          id: submissions[0].id,
-          status: SubmissionStatus.Done,
-          grade: 10,
-        }),
-      );
+      expect(sendSpy).toHaveBeenCalledWith('challenge.correction', {
+        submissionId: result.id,
+        repositoryUrl: 'https://github.com/user/repo',
+      });
     });
   });
 
