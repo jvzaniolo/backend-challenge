@@ -1,156 +1,127 @@
-![image](https://user-images.githubusercontent.com/40845824/121069742-3accdb00-c7a4-11eb-87d0-3dc47e433762.png)
+# Back-end Challenge
 
-# 🚀 Back end challenge
+Desafio de back-end com Nest.js, TypeORM, GraphQL e PostgreSQL.
 
-Bem-vindo(a). Este é o desafio Back end!
+## Instalação
 
-O objetivo deste desafio é avaliar suas habilidades de programação.
-Quando sua solução estiver pronta, basta responder o e-mail que recebeu com o link do seu repo aqui no Github!
-Em seguida, enviaremos o feedback e as instruções dos próximos passos!
+### Pré-requisitos
 
-Caso tenha alguma dúvida, pode enviá-las em resposta ao e-mail que recebeu o teste. Bom desafio!
-Bom desafio!
+- [Node.js](https://nodejs.org/) (versão 18 ou superior)
+- [Yarn](https://classic.yarnpkg.com/) (versão 1.22 ou superior)
+- [Docker](https://www.docker.com/)
 
-> ⚠️ **É importante que o seu repo esteja público, caso contrário não iremos conseguir avaliar sua resposta**
+### Docker containers
 
----
+```bash
+docker compose up -d
+```
 
-- [🧠 Contexto](#-contexto)
-  - [🚰 Fluxo esperado](#-fluxo-esperado)
-  - [⚔️ Desafio](#️-desafio)
-  - [📓 Submissão](#-submissão)
-- [✔️ Critérios de Avaliação](#️-critérios-de-avaliação)
-  - [😎 Seria legal](#-seria-legal)
-- [:rocket: Instruções](#rocket-instruções)
-  - [Docker](#docker)
-  - [Kafka](#kafka)
-  - [GraphQL](#graphql)
-  - [:notebook: To-do list](#notebook-to-do-list)
+### Microsserviço de correções
 
-# 🧠 Contexto
+```bash
+cd packages/corrections
 
-Para deixar a jornada dos nossos alunos mais completa, a Rocketseat disponibiliza desafios que estimulam a prática do conteúdo estudado. Sabendo disso, este projeto consiste em implementar um serviço que gerencie os desafios enviados por nossos alunos.
+# Instale as dependências
+yarn install
 
-Neste projeto, está incluído o **[corrections](packages/corrections) (serviço de correção das submissões)** já pré-configurado, sua missão será implementar os fluxos de:
+# Inicie o serviço
+yarn start
+```
 
-- Interação com Desafios e Submissões. (Criar, buscar, editar e remover);
-- Atualização das submissões utilizando a integração com o serviço [corrections](packages/corrections);
+### Aplicação
 
-### 🚰 Fluxo esperado
+```bash
+cd server
 
-- Uma submissão de um desafio é **enviada**;
-- A submissão é registrada com o status `Pending`;
-  - :warning: **Caso não exista o desafio** ou a **url não seja um repositório do github** a submissão é registrada com status `Error` e um erro é retornado ao usuário, dando fim a esse fluxo;
-- O serviço [corrections](packages/corrections) é notificado e retorna a correção da submissão;
-- O status e a nota da submissão são **atualizados**;
-  
-### ⚔️ Desafio
+# Instale as dependências
+yarn install
 
-| Atributo        | Tipo     |
-| --------------- | -------- |
-| Identificador   | `uuidv4` |
-| Titulo          | `texto`  |
-| Descrição       | `texto`  |
-| Data de criação | `data`   |
+# Inicie a aplicação
+yarn start
+```
 
-**Operações necessárias**
+#### Testes
 
-- [ ] Criar
-- [ ] Remover
-- [ ] Editar
-- [ ] Listar
-  - [ ] Paginação
-  - [ ] Busca por título e descrição
+```bash
+# unit tests
+yarn test
 
-### 📓 Submissão
+# e2e tests
+yarn test:e2e
 
-| Atributo                 | Tipo                   |
-| ------------------------ | ---------------------- |
-| Identificador            | `uuidv4`               |
-| Identificador do desafio | `uuidv4`               |
-| Link para o reposítorio  | `texto`                |
-| Data de criação          | `data`                 |
-| Status                   | `Pending, Error, Done` |
-| Nota                     | `númerico`             |
+# test coverage
+yarn test:cov
+```
 
-**Operações necessárias**
+## GraphQL
 
-- [ ] Enviar
-- [ ] Listar
-  - [ ] Filtros: desafio, intervalo de datas, status
-  - [ ] Paginação
+Acesse o GraphiQL Playground em [http://localhost:3000/graphql](http://localhost:3000/graphql).
 
-## ✔️ Critérios de Avaliação
-
-Além dos requisitos levantados acima, iremos olhar para os seguintes critérios durante a correção do desafio:
-
-- Arquitetura (DDD, Clean Architecture)
-- Documentação (comente sobre decisões técnicas, escolhas, requisitos, etc)
-- Código limpo (utilização de princípios como DRY, KISS, SOLID, YAGNI)
-- Testes (unitários, e2e, etc)
-- Padrão de commits (Conventional)
-
-### 😎 Seria legal
-
-- **Utilizar [Nest.js](https://nestjs.com/)**
-- Custom Scalar Types
-
-## :rocket: Instruções
-
-Chegou a hora de colocar a mão na massa!
-
-Neste projeto já incluímos alguns arquivos para a configuração do projeto.
-
-### Docker
-
-Criamos um `docker-compose` que faz a configuração de 3 _containers_ incluindo as credenciais (login do postgres, database, etc):
-
-| Container | Ports       |
-| --------- | ----------- |
-| Postgres  | `5432:5432` |
-| Kafka     | `9092:9092` |
-| Zookeper  | `2181:2181` |
-
-### Kafka
-
-Escolhemos o utilizar o [Kafka](https://kafka.apache.org/) para a comunicação com o serviço de [corrections](packages/corrections). Caso você utilize Nest.js, o mesmo possui uma [integração completa com essa ferramenta](https://docs.nestjs.com/microservices/kafka).
-
-Nas instruções do serviço de [corrections](packages/corrections) estão especificados os tópicos e eventos que a aplicação deve utilizar.
-
-![image](https://user-images.githubusercontent.com/40845824/122421461-c3950500-cf62-11eb-903a-0b629cc8502f.png)
-
-:warning: É necessário iniciar o serviço de [corrections](packages/corrections) para que os tópicos do Kafka sejam criados.
-
-### GraphQL
-
-A interação com os desafios e submissões deve ser feita via GraphQL, para isso deixamos uma sugestão das operações a serem criadas, porém sinta-se livre para modelar seu _schema_ da melhor forma:
+### Schema
 
 ```graphql
-Query {
-  challenges(...): [Challenge!]!
-  answers(...): [Answer!]!
+type Query {
+  challenges(description: String, page: Int, perPage: Int = 10, title: String): PaginatedChallenge!
+
+  submissions(
+    challengeTitle: String
+    dateRange: DateRangeArgs
+    page: Int
+    perPage: Int = 10
+    status: SubmissionStatus
+  ): PaginatedSubmissions!
 }
 
-Mutation {
- createChallenge(...): Challenge!
- updateChallenge(...): Challenge!
- deleteChallenge(...): Challenge!
+type Mutation {
+  createChallenge(description: String!, title: String!): Challenge!
+  deleteChallenge(id: String!): Challenge!
+  updateChallenge(description: String, id: String!, title: String): Challenge!
 
- answerChallenge(...): Answer!
+  submitChallenge(challengeId: String!, repositoryUrl: String!): Submission!
 }
 ```
 
-### :notebook: To-do list
-- [ ] Fazer o fork do projeto
-- [ ] Configurar ambiente de desenvolvimento (inclusive executar o serviço de [corrections](packages/corrections))
-- [ ] Criar uma [API GraphQL](https://docs.nestjs.com/graphql/quick-start) com o [contexto](#-contexto) acima utilizando Typescript
-- [ ] Fazer a integração com o serviço de [corrections](packages/corrections) através do Apache Kafka
-- [ ] Incluir no README as instruções de instalação do projeto
+## Decisões
 
-:information_source: _Sinta-se livre para incluir quaisquer observações que achar necessário_
+### Nomenclatura: Submissions vs Answers
+
+Na descrição do desafio foi utilizado o nome "Submissões" para se referir às submissões dos desafios, mas no SDL de exemplo, o nome da entidade estava "Answers" (exemplo "query answers()" e "mutation answerChallenge()"). Como a modelagem do SDL era subjetiva, optei por usar o nome "Submissions".
+
+### Relação entre as tabelas
+
+Durante o desenvolvimento do desafio, surgiu a dúvida de como deveria ser o filtro das Submissões dos Desafios ("Filtro pelo ID do Desafio? Ou pelo título?").
+A resposta que recebi por e-mail foi "que pode ser pelo título, mas você pode pensar na forma que achar que fica melhor o filtro", então optei por relacionar as tabelas para poder pesquisar as Submissões por título do desafio.
+Caso o filtro fosse pelo ID do desafio, eu teria mantido as tabelas separadas.
+
+### Scalar customizado: UUID
+
+Pela descrição de modelagem das entidades não vi necessidade de criar um Scalar customizado já que todos os tipos existem no GraphQL, mas como era um requisito do desafio, optei por seguir com a documentação do Nest.js e criar um Scalar do tipo UUID, para validar os campos ID.
+
+### Testes E2E
+
+Como os testes E2E que eu escrevi não esperam pela resposta do Kafka para rodar, o Jest finaliza o teste enquanto o Kafka ainda está executando (mais especificamente, enviando a resposta pelo `reply`).
+Isso gera alguns erros como comentado aqui https://github.com/tulios/kafkajs/issues/779#issuecomment-648900173.
+Como alternativa, adicionei um `timeout` para dar tempo do Kafka responder antes do Jest finalizar o teste, mas gostaria de saber quais outras alternativas existem para resolver esse problema.
+
+### TypeORM
+
+Optei por utilizar o TypeORM porque tem bastante documentação sobre a ferramenta no site do Nest.js, além de possibilitar a utilização da mesma classe de entidade para tanto o GraphQL Schema e a tabela no banco.
+
+```js
+// challenge.entity.ts
+@Entity()
+@ObjectType()
+export class Challenge {
+  @Field(() => ID)
+  @PrimaryGeneratedColumn('uuid')
+  id: string
+
+  // ...
+}
+```
 
 ---
 
-_O desafio acima foi cuidadosamente construído para propósitos de avaliação apenas. Já possuimos uma funcionalidade similar na nossa plataforma._
-
-Made with 💜 at Rocketseat
+<p align="center">
+  Feito com 💜 por <a href="https://github.com/jvzaniolo">João Vitor</a>.
+</p>
