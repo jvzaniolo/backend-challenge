@@ -36,7 +36,7 @@ export class SubmissionsModule implements OnModuleInit, OnModuleDestroy {
 
   async onModuleInit() {
     this.client.subscribeToResponseOf('challenge.correction');
-    // await this.client.connect();
+    await this.client.connect();
   }
 
   async onModuleDestroy() {
