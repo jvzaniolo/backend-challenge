@@ -33,6 +33,9 @@ yarn start
 ```bash
 cd server
 
+# Crie o arquivo .env com as variáveis de ambiente
+cp .env.example .env
+
 # Instale as dependências
 yarn install
 
