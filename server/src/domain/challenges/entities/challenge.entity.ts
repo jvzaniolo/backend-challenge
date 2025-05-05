@@ -2,7 +2,7 @@ import { Field, ObjectType } from '@nestjs/graphql';
 import { Column, CreateDateColumn, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { Pagination } from '~/common/pagination/pagination.type';
 import { CustomUuidScalar } from '~/common/scalar/uuid.scalar';
-import { Submission } from '../submissions/submission.entity';
+import { Submission } from '~/domain/submissions/submission.entity';
 
 @Entity()
 @ObjectType()
