@@ -10,19 +10,14 @@ import { SubmissionsRepositoryInterface } from '../submissions-repository.interf
 export class FakeSubmissionsRepository implements SubmissionsRepositoryInterface {
   private submissions: Submission[] = [];
 
-  async create({
-    challengeId,
-    repositoryUrl,
-  }: {
-    challengeId: string;
-    repositoryUrl: string;
-  }): Promise<Submission> {
-    const submission = new Submission();
-    submission.id = randomUUID();
-    submission.challengeId = challengeId;
-    submission.repositoryUrl = repositoryUrl;
-    submission.status = SubmissionStatus.Pending;
-    submission.createdAt = new Date();
+  async create(input: { challengeId: string; repositoryUrl: string }): Promise<Submission> {
+    const submission: Submission = {
+      id: randomUUID(),
+      status: SubmissionStatus.Pending,
+      createdAt: new Date(),
+      grade: null,
+      ...input,
+    };
 
     this.submissions.push(submission);
     return submission;
