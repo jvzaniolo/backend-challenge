@@ -1,7 +1,7 @@
 import { Args, Query, Resolver } from '@nestjs/graphql';
 import { ListSubmissionsUseCase } from '~/domain/submissions/use-cases/list-submissions/list-submissions';
 import { PaginatedSubmissions, SubmissionType } from '../object-types/submission.type';
-import { ListSubmissionsArgs } from './list-submissions.args';
+import { ListSubmissionsArgs } from './args-type/list-submissions.args';
 
 @Resolver(() => SubmissionType)
 export class ListSubmissionsResolver {

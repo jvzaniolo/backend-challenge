@@ -11,9 +11,10 @@ export class SubmitChallengeResolver {
     @Args('challengeId') challengeId: string,
     @Args('repositoryUrl') repositoryUrl: string,
   ): Promise<SubmissionType> {
-    return this.submitChallengeUseCase.execute({
+    const { submission } = await this.submitChallengeUseCase.execute({
       challengeId,
       repositoryUrl,
     });
+    return submission;
   }
 }
