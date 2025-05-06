@@ -42,4 +42,14 @@ describe('Update challenge use case', () => {
     expect(challenge.title).toBe('Full-stack Challenge');
     expect(challenge.description).toBe('This is a full-stack challenge');
   });
+
+  it('should throw an error if the challenge does not exist', async () => {
+    await expect(
+      sut.execute({
+        id: 'non-existing-id',
+        title: 'Full-stack Challenge',
+        description: 'This is a full-stack challenge',
+      }),
+    ).rejects.toThrow('Challenge not found');
+  });
 });
