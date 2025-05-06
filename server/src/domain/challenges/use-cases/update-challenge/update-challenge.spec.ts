@@ -1,6 +1,5 @@
-import { Test } from '@nestjs/testing';
+import { ChallengesRepository } from '../../repositories/challenges.repository';
 import { FakeChallengesRepository } from '../../repositories/fake/fake-challenges.repository';
-import { ChallengesRepository } from '../../repositories/typeorm/challenges.repository';
 import { UpdateChallengeUseCase } from './update-challenge';
 
 describe('Update challenge use case', () => {
@@ -8,18 +7,8 @@ describe('Update challenge use case', () => {
   let challengesRepository: ChallengesRepository;
 
   beforeEach(async () => {
-    const module = await Test.createTestingModule({
-      providers: [
-        UpdateChallengeUseCase,
-        {
-          provide: ChallengesRepository,
-          useClass: FakeChallengesRepository,
-        },
-      ],
-    }).compile();
-
-    sut = module.get(UpdateChallengeUseCase);
-    challengesRepository = module.get(ChallengesRepository);
+    challengesRepository = new FakeChallengesRepository();
+    sut = new UpdateChallengeUseCase(challengesRepository);
   });
 
   it('should be defined', () => {

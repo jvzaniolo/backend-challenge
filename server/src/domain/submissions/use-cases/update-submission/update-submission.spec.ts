@@ -1,8 +1,7 @@
-import { Test } from '@nestjs/testing';
 import { randomUUID } from 'node:crypto';
 import { SubmissionStatus } from '../../entities/submission.entity';
 import { FakeSubmissionsRepository } from '../../repositories/fake/fake-submissions.repository';
-import { SubmissionsRepository } from '../../repositories/typeorm/submissions.repository';
+import { SubmissionsRepository } from '../../repositories/submissions-repository.interface';
 import { UpdateSubmissionUseCase } from './update-submission';
 
 describe('Update submission use case', () => {
@@ -10,18 +9,9 @@ describe('Update submission use case', () => {
   let submissionsRepository: SubmissionsRepository;
 
   beforeEach(async () => {
-    const module = await Test.createTestingModule({
-      providers: [
-        UpdateSubmissionUseCase,
-        {
-          provide: SubmissionsRepository,
-          useClass: FakeSubmissionsRepository,
-        },
-      ],
-    }).compile();
+    submissionsRepository = new FakeSubmissionsRepository();
 
-    sut = module.get(UpdateSubmissionUseCase);
-    submissionsRepository = module.get(SubmissionsRepository);
+    sut = new UpdateSubmissionUseCase(submissionsRepository);
   });
 
   it('should be defined', () => {

@@ -1,11 +1,11 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ILike, Repository } from 'typeorm';
-import { Challenge } from '../../entities/challenge.entity';
-import { ChallengesRepositoryInterface } from '../challenges-repository.interface';
+import { Challenge } from '~/domain/challenges/entities/challenge.entity';
+import { ChallengesRepository } from '~/domain/challenges/repositories/challenges.repository';
 
 @Injectable()
-export class ChallengesRepository implements ChallengesRepositoryInterface {
+export class TypeORMChallengesRepository implements ChallengesRepository {
   constructor(
     @InjectRepository(Challenge)
     private readonly challengeRepository: Repository<Challenge>,

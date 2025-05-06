@@ -4,10 +4,9 @@ import {
   Submission,
   SubmissionStatus,
 } from '../../entities/submission.entity';
-import { ListSubmissionsArgs } from '../../use-cases/list-submissions/list-submissions.args';
-import { SubmissionsRepositoryInterface } from '../submissions-repository.interface';
+import { SubmissionsRepository } from '../submissions-repository.interface';
 
-export class FakeSubmissionsRepository implements SubmissionsRepositoryInterface {
+export class FakeSubmissionsRepository implements SubmissionsRepository {
   private submissions: Submission[] = [];
 
   async create(input: { challengeId: string; repositoryUrl: string }): Promise<Submission> {
@@ -49,7 +48,13 @@ export class FakeSubmissionsRepository implements SubmissionsRepositoryInterface
     status,
     dateRange,
     challengeTitle,
-  }: ListSubmissionsArgs): Promise<PaginatedSubmissions> {
+  }: {
+    page?: number;
+    perPage: number;
+    status?: SubmissionStatus;
+    dateRange?: { startDate: Date; endDate: Date };
+    challengeTitle?: string;
+  }): Promise<PaginatedSubmissions> {
     const filteredSubmissions = this.submissions.filter((submission) => {
       const matchesStatus = status ? submission.status === status : true;
       const matchesChallengeTitle = challengeTitle

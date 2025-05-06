@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
+import { ListChallengesArgs } from '../../../../infra/http/resolvers/list-challenges.args';
 import { PaginatedChallenge } from '../../entities/challenge.entity';
-import { ChallengesRepository } from '../../repositories/typeorm/challenges.repository';
-import { ListChallengesArgs } from './list-challenges.args';
+import { ChallengesRepository } from '../../repositories/challenges.repository';
 
 @Injectable()
 export class ListChallengesUseCase {

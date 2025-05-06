@@ -1,9 +1,9 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { ClientKafkaProxy } from '@nestjs/microservices';
 import { isGithubRepo } from '~/common/utils/is-github-repo';
-import { ChallengesRepository } from '~/domain/challenges/repositories/typeorm/challenges.repository';
+import { ChallengesRepository } from '../../../challenges/repositories/challenges.repository';
 import { Submission, SubmissionStatus } from '../../entities/submission.entity';
-import { SubmissionsRepository } from '../../repositories/typeorm/submissions.repository';
+import { SubmissionsRepository } from '../../repositories/submissions-repository.interface';
 
 @Injectable()
 export class SubmitChallengeUseCase {

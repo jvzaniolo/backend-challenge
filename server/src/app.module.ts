@@ -4,7 +4,7 @@ import { ConfigModule } from '@nestjs/config';
 import { GraphQLModule } from '@nestjs/graphql';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { CustomUuidScalar } from './common/scalar/uuid.scalar';
-import { DomainModule } from './domain/domain.module';
+import { HttpModule } from './infra/http/http.module';
 
 @Module({
   imports: [
@@ -26,7 +26,7 @@ import { DomainModule } from './domain/domain.module';
       autoLoadEntities: true,
       synchronize: process.env.NODE_ENV !== 'production',
     }),
-    DomainModule,
+    HttpModule,
   ],
 })
 export class AppModule {}

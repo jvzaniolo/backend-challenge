@@ -1,6 +1,6 @@
 import { Args, Mutation, Resolver } from '@nestjs/graphql';
-import { Challenge } from '../../entities/challenge.entity';
-import { UpdateChallengeUseCase } from './update-challenge';
+import { Challenge } from '~/domain/challenges/entities/challenge.entity';
+import { UpdateChallengeUseCase } from '~/domain/challenges/use-cases/update-challenge/update-challenge';
 
 @Resolver(() => Challenge)
 export class UpdateChallengeResolver {

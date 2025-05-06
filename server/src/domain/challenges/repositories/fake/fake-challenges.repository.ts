@@ -1,8 +1,8 @@
 import { randomUUID } from 'node:crypto';
 import { Challenge } from '../../entities/challenge.entity';
-import { ChallengesRepositoryInterface } from '../challenges-repository.interface';
+import { ChallengesRepository } from '../challenges.repository';
 
-export class FakeChallengesRepository implements ChallengesRepositoryInterface {
+export class FakeChallengesRepository implements ChallengesRepository {
   private challenges: Challenge[] = [];
 
   async create(input: { title: string; description: string }): Promise<Challenge> {

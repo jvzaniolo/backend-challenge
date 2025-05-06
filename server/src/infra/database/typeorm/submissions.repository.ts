@@ -5,12 +5,11 @@ import {
   PaginatedSubmissions,
   Submission,
   SubmissionStatus,
-} from '../../entities/submission.entity';
-import { ListSubmissionsArgs } from '../../use-cases/list-submissions/list-submissions.args';
-import { SubmissionsRepositoryInterface } from '../submissions-repository.interface';
+} from '~/domain/submissions/entities/submission.entity';
+import { SubmissionsRepository } from '~/domain/submissions/repositories/submissions-repository.interface';
 
 @Injectable()
-export class SubmissionsRepository implements SubmissionsRepositoryInterface {
+export class TypeORMSubmissionsRepository implements SubmissionsRepository {
   constructor(
     @InjectRepository(Submission)
     private readonly submissionRepository: Repository<Submission>,
@@ -69,7 +68,13 @@ export class SubmissionsRepository implements SubmissionsRepositoryInterface {
     status,
     dateRange,
     challengeTitle,
-  }: ListSubmissionsArgs): Promise<PaginatedSubmissions> {
+  }: {
+    page?: number;
+    perPage: number;
+    status?: SubmissionStatus;
+    dateRange?: { startDate: Date; endDate: Date };
+    challengeTitle?: string;
+  }): Promise<PaginatedSubmissions> {
     const [items, count] = await this.submissionRepository.findAndCount({
       skip: page ? (page - 1) * perPage : 0,
       take: perPage,

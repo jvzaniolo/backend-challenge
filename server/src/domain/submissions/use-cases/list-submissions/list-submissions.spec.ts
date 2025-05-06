@@ -1,10 +1,9 @@
-import { Test } from '@nestjs/testing';
 import { randomUUID } from 'node:crypto';
-import { FakeChallengesRepository } from '~/domain/challenges/repositories/fake/fake-challenges.repository';
-import { ChallengesRepository } from '~/domain/challenges/repositories/typeorm/challenges.repository';
+import { ChallengesRepository } from '../../../challenges/repositories/challenges.repository';
+import { FakeChallengesRepository } from '../../../challenges/repositories/fake/fake-challenges.repository';
 import { Submission, SubmissionStatus } from '../../entities/submission.entity';
 import { FakeSubmissionsRepository } from '../../repositories/fake/fake-submissions.repository';
-import { SubmissionsRepository } from '../../repositories/typeorm/submissions.repository';
+import { SubmissionsRepository } from '../../repositories/submissions-repository.interface';
 import { ListSubmissionsUseCase } from './list-submissions';
 
 function makeSubmission(overrides: Partial<Submission> = {}): Submission {
@@ -25,23 +24,10 @@ describe('List submissions use case', () => {
   let submissionsRepository: SubmissionsRepository;
 
   beforeEach(async () => {
-    const module = await Test.createTestingModule({
-      providers: [
-        ListSubmissionsUseCase,
-        {
-          provide: SubmissionsRepository,
-          useClass: FakeSubmissionsRepository,
-        },
-        {
-          provide: ChallengesRepository,
-          useClass: FakeChallengesRepository,
-        },
-      ],
-    }).compile();
+    challengesRepository = new FakeChallengesRepository();
+    submissionsRepository = new FakeSubmissionsRepository();
 
-    sut = module.get(ListSubmissionsUseCase);
-    challengesRepository = module.get(ChallengesRepository);
-    submissionsRepository = module.get(SubmissionsRepository);
+    sut = new ListSubmissionsUseCase(submissionsRepository);
   });
 
   it('should be defined', () => {

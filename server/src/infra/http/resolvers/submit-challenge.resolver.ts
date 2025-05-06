@@ -1,6 +1,6 @@
 import { Args, Mutation, Resolver } from '@nestjs/graphql';
-import { Submission } from '../../entities/submission.entity';
-import { SubmitChallengeUseCase } from './submit-challenge';
+import { Submission } from '~/domain/submissions/entities/submission.entity';
+import { SubmitChallengeUseCase } from '~/domain/submissions/use-cases/submit-challenge/submit-challenge';
 
 @Resolver(() => Submission)
 export class SubmitChallengeResolver {

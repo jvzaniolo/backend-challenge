@@ -1,6 +1,6 @@
 import { Args, Query, Resolver } from '@nestjs/graphql';
-import { Challenge, PaginatedChallenge } from '../../entities/challenge.entity';
-import { ListChallengesUseCase } from './list-challenges';
+import { Challenge, PaginatedChallenge } from '~/domain/challenges/entities/challenge.entity';
+import { ListChallengesUseCase } from '~/domain/challenges/use-cases/list-challenges/list-challenges';
 import { ListChallengesArgs } from './list-challenges.args';
 
 @Resolver(() => Challenge)
