@@ -1,8 +1,13 @@
 import { randomUUID } from 'node:crypto';
 import { Challenge } from '../../challenges/entities/challenge';
-import { SubmissionInterface, SubmissionStatus } from './submission.interface';
 
-export class Submission implements SubmissionInterface {
+export enum SubmissionStatus {
+  Pending = 'Pending',
+  Done = 'Done',
+  Error = 'Error',
+}
+
+export class Submission {
   constructor(
     public id: string,
     public challengeId: string,

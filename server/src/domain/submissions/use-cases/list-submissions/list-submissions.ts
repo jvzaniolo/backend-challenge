@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { SubmissionStatus } from '../../entities/submission.interface';
+import { SubmissionStatus } from '../../entities/submission';
 import { SubmissionsRepository } from '../../repositories/submissions-repository.interface';
 
 @Injectable()

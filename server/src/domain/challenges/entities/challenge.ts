@@ -1,8 +1,7 @@
 import { randomUUID } from 'node:crypto';
 import { Submission } from '../../submissions/entities/submission';
-import { ChallengeInterface } from './challenge.interface';
 
-export class Challenge implements ChallengeInterface {
+export class Challenge {
   constructor(
     public id: string,
     public title: string,

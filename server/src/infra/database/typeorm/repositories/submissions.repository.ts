@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Between, ILike, Repository } from 'typeorm';
-import { SubmissionStatus } from '~/domain/submissions/entities/submission.interface';
+import { SubmissionStatus } from '~/domain/submissions/entities/submission';
 import { SubmissionsRepository } from '~/domain/submissions/repositories/submissions-repository.interface';
 import { SubmissionMapper } from '../mappers/submission.mapper';
 import { SubmissionSchema } from '../schema/submission.schema';

@@ -7,7 +7,7 @@ import {
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { Challenge } from '~/domain/challenges/entities/challenge';
-import { SubmissionStatus } from '~/domain/submissions/entities/submission.interface';
+import { SubmissionStatus } from '~/domain/submissions/entities/submission';
 import { ChallengeSchema } from './challenge.schema';
 
 @Entity('submission')

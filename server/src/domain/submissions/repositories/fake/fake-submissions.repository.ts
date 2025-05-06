@@ -1,5 +1,4 @@
-import { Submission } from '../../entities/submission';
-import { SubmissionStatus } from '../../entities/submission.interface';
+import { Submission, SubmissionStatus } from '../../entities/submission';
 import { SubmissionsRepository } from '../submissions-repository.interface';
 
 export class FakeSubmissionsRepository implements SubmissionsRepository {
