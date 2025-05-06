@@ -1,4 +1,5 @@
-import { PaginatedSubmissions, Submission, SubmissionStatus } from '../entities/submission.entity';
+import { Submission } from '../entities/submission';
+import { SubmissionStatus } from '../entities/submission.interface';
 
 export abstract class SubmissionsRepository {
   abstract create(args: { challengeId: string; repositoryUrl: string }): Promise<Submission>;
@@ -14,5 +15,12 @@ export abstract class SubmissionsRepository {
     status?: SubmissionStatus;
     dateRange?: { startDate: Date; endDate: Date };
     challengeTitle?: string;
-  }): Promise<PaginatedSubmissions>;
+  }): Promise<{
+    items: Submission[];
+    pagination: {
+      page: number;
+      perPage: number;
+      total: number;
+    };
+  }>;
 }

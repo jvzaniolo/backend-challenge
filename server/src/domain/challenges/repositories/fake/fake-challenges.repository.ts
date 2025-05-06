@@ -1,16 +1,14 @@
-import { randomUUID } from 'node:crypto';
-import { Challenge } from '../../entities/challenge.entity';
+import { Challenge } from '../../entities/challenge';
 import { ChallengesRepository } from '../challenges.repository';
 
 export class FakeChallengesRepository implements ChallengesRepository {
   private challenges: Challenge[] = [];
 
   async create(input: { title: string; description: string }): Promise<Challenge> {
-    const challenge = new Challenge();
-    challenge.id = randomUUID();
-    challenge.title = input.title;
-    challenge.description = input.description;
-    challenge.createdAt = new Date();
+    const challenge = Challenge.create({
+      title: input.title,
+      description: input.description,
+    });
     this.challenges.push(challenge);
     return challenge;
   }

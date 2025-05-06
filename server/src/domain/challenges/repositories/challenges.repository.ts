@@ -1,4 +1,4 @@
-import { Challenge, PaginatedChallenge } from '../entities/challenge.entity';
+import { Challenge } from '../entities/challenge';
 
 export abstract class ChallengesRepository {
   abstract create(input: { title: string; description: string }): Promise<Challenge>;
@@ -14,5 +14,12 @@ export abstract class ChallengesRepository {
     page?: number;
     title?: string;
     description?: string;
-  }): Promise<PaginatedChallenge>;
+  }): Promise<{
+    items: Challenge[];
+    pagination: {
+      page: number;
+      perPage: number;
+      total: number;
+    };
+  }>;
 }

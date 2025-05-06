@@ -1,16 +1,16 @@
 import { Args, Mutation, Resolver } from '@nestjs/graphql';
-import { Challenge } from '~/domain/challenges/entities/challenge.entity';
 import { CreateChallengeUseCase } from '~/domain/challenges/use-cases/create-challenge/create-challenge';
+import { GraphQLChallenge } from '~/infra/database/typeorm/entities/challenge.entity';
 
-@Resolver(() => Challenge)
+@Resolver(() => GraphQLChallenge)
 export class CreateChallengeResolver {
   constructor(private createChallengeUseCase: CreateChallengeUseCase) {}
 
-  @Mutation(() => Challenge)
+  @Mutation(() => GraphQLChallenge)
   async createChallenge(
     @Args('title') title: string,
     @Args('description') description: string,
-  ): Promise<Challenge> {
+  ): Promise<GraphQLChallenge> {
     const { challenge } = await this.createChallengeUseCase.execute({ title, description });
     return challenge;
   }

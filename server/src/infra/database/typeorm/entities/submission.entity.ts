@@ -9,13 +9,13 @@ import {
 } from 'typeorm';
 import { Pagination } from '~/core/pagination/pagination.type';
 import { CustomUuidScalar } from '~/core/scalar/uuid.scalar';
-import { Challenge } from '~/domain/challenges/entities/challenge.entity';
-
-export enum SubmissionStatus {
-  Pending = 'Pending',
-  Done = 'Done',
-  Error = 'Error',
-}
+import { Challenge } from '~/domain/challenges/entities/challenge';
+import { Submission } from '~/domain/submissions/entities/submission';
+import {
+  SubmissionInterface,
+  SubmissionStatus,
+} from '~/domain/submissions/entities/submission.interface';
+import { GraphQLChallenge } from './challenge.entity';
 
 registerEnumType(SubmissionStatus, {
   name: 'SubmissionStatus',
@@ -26,9 +26,9 @@ registerEnumType(SubmissionStatus, {
   },
 });
 
-@Entity()
-@ObjectType()
-export class Submission {
+@Entity('submission')
+@ObjectType('Submission')
+export class GraphQLSubmission implements SubmissionInterface {
   @Field(() => CustomUuidScalar)
   @PrimaryGeneratedColumn('uuid')
   id: string;
@@ -53,8 +53,8 @@ export class Submission {
   @CreateDateColumn()
   createdAt: Date;
 
-  @Field(() => Challenge, { nullable: true })
-  @ManyToOne(() => Challenge, (challenge) => challenge.submissions, {
+  @Field(() => GraphQLChallenge, { nullable: true })
+  @ManyToOne(() => GraphQLChallenge, (challenge) => challenge.submissions, {
     nullable: true,
     createForeignKeyConstraints: false,
   })
@@ -64,7 +64,7 @@ export class Submission {
 
 @ObjectType()
 export class PaginatedSubmissions {
-  @Field(() => [Submission])
+  @Field(() => [GraphQLSubmission])
   items: Submission[];
 
   @Field(() => Pagination)

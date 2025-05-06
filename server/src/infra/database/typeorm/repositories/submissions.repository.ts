@@ -1,18 +1,18 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Between, ILike, Repository } from 'typeorm';
-import {
-  PaginatedSubmissions,
-  Submission,
-  SubmissionStatus,
-} from '~/domain/submissions/entities/submission.entity';
+import { SubmissionStatus } from '~/domain/submissions/entities/submission.interface';
 import { SubmissionsRepository } from '~/domain/submissions/repositories/submissions-repository.interface';
+import {
+  GraphQLSubmission,
+  PaginatedSubmissions,
+} from '~/infra/database/typeorm/entities/submission.entity';
 
 @Injectable()
 export class TypeORMSubmissionsRepository implements SubmissionsRepository {
   constructor(
-    @InjectRepository(Submission)
-    private readonly submissionRepository: Repository<Submission>,
+    @InjectRepository(GraphQLSubmission)
+    private readonly submissionRepository: Repository<GraphQLSubmission>,
   ) {}
 
   async create({
@@ -21,7 +21,7 @@ export class TypeORMSubmissionsRepository implements SubmissionsRepository {
   }: {
     challengeId: string;
     repositoryUrl: string;
-  }): Promise<Submission> {
+  }): Promise<GraphQLSubmission> {
     const submission = this.submissionRepository.create({
       challengeId,
       repositoryUrl,
@@ -38,7 +38,7 @@ export class TypeORMSubmissionsRepository implements SubmissionsRepository {
     id: string;
     status?: SubmissionStatus;
     grade?: number;
-  }): Promise<Submission | null> {
+  }): Promise<GraphQLSubmission | null> {
     const submission = await this.submissionRepository.findOneBy({ id });
 
     if (!submission) {
@@ -53,7 +53,7 @@ export class TypeORMSubmissionsRepository implements SubmissionsRepository {
     return this.submissionRepository.save(submission);
   }
 
-  async findBy({ id }: { id: string }): Promise<Submission | null> {
+  async findBy({ id }: { id: string }): Promise<GraphQLSubmission | null> {
     return this.submissionRepository.findOne({
       where: { id },
       relations: {

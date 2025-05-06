@@ -1,6 +1,6 @@
 import { Controller } from '@nestjs/common';
 import { MessagePattern, Payload } from '@nestjs/microservices';
-import { SubmissionStatus } from '~/domain/submissions/entities/submission.entity';
+import { SubmissionStatus } from '~/domain/submissions/entities/submission.interface';
 import { UpdateSubmissionUseCase } from '~/domain/submissions/use-cases/update-submission/update-submission';
 
 @Controller()

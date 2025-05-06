@@ -1,5 +1,5 @@
 import { randomUUID } from 'node:crypto';
-import { SubmissionStatus } from '../../entities/submission.entity';
+import { SubmissionStatus } from '../../entities/submission.interface';
 import { FakeSubmissionsRepository } from '../../repositories/fake/fake-submissions.repository';
 import { SubmissionsRepository } from '../../repositories/submissions-repository.interface';
 import { UpdateSubmissionUseCase } from './update-submission';

@@ -1,6 +1,6 @@
 import { ChallengesRepository } from '../../../challenges/repositories/challenges.repository';
 import { FakeChallengesRepository } from '../../../challenges/repositories/fake/fake-challenges.repository';
-import { SubmissionStatus } from '../../entities/submission.entity';
+import { SubmissionStatus } from '../../entities/submission.interface';
 import { FakeSubmissionsRepository } from '../../repositories/fake/fake-submissions.repository';
 import { SubmissionsRepository } from '../../repositories/submissions-repository.interface';
 import { SubmitChallengeUseCase } from './submit-challenge';

@@ -1,13 +1,13 @@
 import { Args, Mutation, Resolver } from '@nestjs/graphql';
-import { Challenge } from '~/domain/challenges/entities/challenge.entity';
 import { DeleteChallengeUseCase } from '~/domain/challenges/use-cases/delete-challenge/delete-challenge';
+import { GraphQLChallenge } from '~/infra/database/typeorm/entities/challenge.entity';
 
-@Resolver(() => Challenge)
+@Resolver(() => GraphQLChallenge)
 export class DeleteChallengeResolver {
   constructor(private deleteChallengeUseCase: DeleteChallengeUseCase) {}
 
-  @Mutation(() => Challenge)
-  async deleteChallenge(@Args('id') id: string): Promise<Challenge> {
+  @Mutation(() => GraphQLChallenge)
+  async deleteChallenge(@Args('id') id: string): Promise<GraphQLChallenge> {
     const { challenge } = await this.deleteChallengeUseCase.execute({ id });
     return challenge;
   }

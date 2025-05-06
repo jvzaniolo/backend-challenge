@@ -2,11 +2,14 @@ import { Field, ObjectType } from '@nestjs/graphql';
 import { Column, CreateDateColumn, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { Pagination } from '~/core/pagination/pagination.type';
 import { CustomUuidScalar } from '~/core/scalar/uuid.scalar';
-import { Submission } from '~/domain/submissions/entities/submission.entity';
+import { Challenge } from '~/domain/challenges/entities/challenge';
+import { ChallengeInterface } from '~/domain/challenges/entities/challenge.interface';
+import { Submission } from '~/domain/submissions/entities/submission';
+import { GraphQLSubmission } from './submission.entity';
 
-@Entity()
-@ObjectType()
-export class Challenge {
+@Entity('challenge')
+@ObjectType('Challenge')
+export class GraphQLChallenge implements ChallengeInterface {
   @Field(() => CustomUuidScalar)
   @PrimaryGeneratedColumn('uuid')
   id: string;
@@ -23,14 +26,14 @@ export class Challenge {
   @CreateDateColumn()
   createdAt: Date;
 
-  @Field(() => [Submission], { nullable: true })
-  @OneToMany(() => Submission, (submission) => submission.challenge)
+  @Field(() => [GraphQLSubmission], { nullable: true })
+  @OneToMany(() => GraphQLSubmission, (submission) => submission.challenge)
   submissions?: Submission[];
 }
 
 @ObjectType()
 export class PaginatedChallenge {
-  @Field(() => [Challenge])
+  @Field(() => [GraphQLChallenge])
   items: Challenge[];
 
   @Field(() => Pagination)

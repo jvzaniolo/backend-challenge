@@ -1,19 +1,21 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ILike, Repository } from 'typeorm';
-import { Challenge } from '~/domain/challenges/entities/challenge.entity';
+import { Challenge } from '~/domain/challenges/entities/challenge';
 import { ChallengesRepository } from '~/domain/challenges/repositories/challenges.repository';
+import { GraphQLChallenge } from '../entities/challenge.entity';
+import { ChallengeMapper } from '../mappers/challenge.mapper';
 
 @Injectable()
 export class TypeORMChallengesRepository implements ChallengesRepository {
   constructor(
-    @InjectRepository(Challenge)
-    private readonly challengeRepository: Repository<Challenge>,
+    @InjectRepository(GraphQLChallenge)
+    private readonly challengeRepository: Repository<GraphQLChallenge>,
   ) {}
 
   async create(input: { title: string; description: string }): Promise<Challenge> {
     const challenge = this.challengeRepository.create(input);
-    return this.challengeRepository.save(challenge);
+    return ChallengeMapper.toDomain(await this.challengeRepository.save(challenge));
   }
 
   async update({
@@ -33,7 +35,7 @@ export class TypeORMChallengesRepository implements ChallengesRepository {
       title,
       description,
     });
-    return this.challengeRepository.save(challenge);
+    return ChallengeMapper.toDomain(await this.challengeRepository.save(challenge));
   }
 
   async delete({ id }: { id: string }): Promise<Challenge | null> {
@@ -42,16 +44,20 @@ export class TypeORMChallengesRepository implements ChallengesRepository {
       return null;
     }
     await this.challengeRepository.delete(id);
-    return challenge;
+    return ChallengeMapper.toDomain(challenge);
   }
 
   async findBy({ id }: { id: string }): Promise<Challenge | null> {
-    return this.challengeRepository.findOne({
+    const challenge = await this.challengeRepository.findOne({
       where: { id },
       relations: {
         submissions: true,
       },
     });
+    if (!challenge) {
+      return null;
+    }
+    return ChallengeMapper.toDomain(challenge);
   }
 
   async findMany({
@@ -78,7 +84,7 @@ export class TypeORMChallengesRepository implements ChallengesRepository {
     });
 
     return {
-      items,
+      items: items.map(ChallengeMapper.toDomain),
       pagination: {
         total: count,
         page: page || 1,
