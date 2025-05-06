@@ -93,7 +93,8 @@ Na descrição do desafio foi utilizado o nome "Submissões" para se referir às
 ### Relação entre as tabelas
 
 Durante o desenvolvimento do desafio, surgiu a dúvida de como deveria ser o filtro das Submissões dos Desafios ("Filtro pelo ID do Desafio? Ou pelo título?").
-A resposta que recebi por e-mail foi "que pode ser pelo título, mas você pode pensar na forma que achar que fica melhor o filtro", então optei por não relacionar as tabelas e filtrar as Submissões direto pelo `challengeId`, simplificando a implementação.
+A resposta que recebi por e-mail foi "que pode ser pelo título, mas você pode pensar na forma que achar que fica melhor o filtro", então optei por relacionar as tabelas para poder pesquisar as Submissões por título do desafio.
+Caso o filtro fosse pelo ID do desafio, eu teria mantido as tabelas separadas.
 
 ### Scalar customizado: UUID
 

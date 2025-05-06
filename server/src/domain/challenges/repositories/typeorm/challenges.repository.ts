@@ -48,6 +48,9 @@ export class ChallengesRepository implements ChallengesRepositoryInterface {
   async findBy({ id }: { id: string }): Promise<Challenge | null> {
     return this.challengeRepository.findOne({
       where: { id },
+      relations: {
+        submissions: true,
+      },
     });
   }
 
@@ -68,6 +71,9 @@ export class ChallengesRepository implements ChallengesRepositoryInterface {
       where: {
         title: title ? ILike(`%${title}%`) : undefined,
         description: description ? ILike(`%${description}%`) : undefined,
+      },
+      relations: {
+        submissions: true,
       },
     });
 
