@@ -94,7 +94,7 @@ Na descrição do desafio foi utilizado o nome "Submissões" para se referir às
 
 Durante o desenvolvimento do desafio, surgiu a dúvida de como deveria ser o filtro das Submissões dos Desafios ("Filtro pelo ID do Desafio? Ou pelo título?").
 A resposta que recebi por e-mail foi "que pode ser pelo título, mas você pode pensar na forma que achar que fica melhor o filtro", então optei por relacionar as tabelas para poder pesquisar as Submissões por título do desafio.
-Caso o filtro fosse pelo ID do desafio, eu teria mantido as tabelas separadas.
+Caso o filtro fosse pelo ID do desafio, eu teria mantido as tabelas **separadas**.
 
 ### Scalar customizado: UUID
 
@@ -108,20 +108,7 @@ Como alternativa, adicionei um `timeout` para dar tempo do Kafka responder antes
 
 ### TypeORM
 
-Optei por utilizar o TypeORM porque tem bastante documentação sobre a ferramenta no site do Nest.js, além de possibilitar a utilização da mesma classe de entidade para tanto o GraphQL Schema e a tabela no banco.
-
-```js
-// challenge.entity.ts
-@Entity()
-@ObjectType()
-export class Challenge {
-  @Field(() => ID)
-  @PrimaryGeneratedColumn('uuid')
-  id: string
-
-  // ...
-}
-```
+Optei por utilizar o TypeORM porque tem bastante documentação sobre a ferramenta no site do Nest.js.
 
 ---
 
