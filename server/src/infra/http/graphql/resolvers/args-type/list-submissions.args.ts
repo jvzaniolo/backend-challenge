@@ -1,6 +1,6 @@
 import { ArgsType, Field, InputType } from '@nestjs/graphql';
 import { SubmissionStatus } from '~/domain/submissions/entities/submission';
-import { PaginationArgs } from '~/infra/http/resolvers/args-type/pagination.args';
+import { PaginationArgs } from './pagination.args';
 
 @InputType()
 class DateRangeArgs {

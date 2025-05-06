@@ -2,9 +2,9 @@ import { Field, Float, ObjectType, registerEnumType } from '@nestjs/graphql';
 
 import { Challenge } from '~/domain/challenges/entities/challenge';
 import { Submission, SubmissionStatus } from '~/domain/submissions/entities/submission';
-import { PaginationType } from '~/infra/http/object-types/pagination.type';
-import { CustomUuidScalar } from '~/infra/http/scalars/uuid.scalar';
+import { CustomUuidScalar } from '../scalars/uuid.scalar';
 import { ChallengeType } from './challenge.type';
+import { PaginationType } from './pagination.type';
 
 registerEnumType(SubmissionStatus, {
   name: 'SubmissionStatus',

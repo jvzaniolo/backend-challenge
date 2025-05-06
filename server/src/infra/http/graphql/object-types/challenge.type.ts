@@ -1,8 +1,8 @@
 import { Field, ObjectType } from '@nestjs/graphql';
 import { Challenge } from '~/domain/challenges/entities/challenge';
 import { Submission } from '~/domain/submissions/entities/submission';
-import { PaginationType } from '~/infra/http/object-types/pagination.type';
-import { CustomUuidScalar } from '~/infra/http/scalars/uuid.scalar';
+import { CustomUuidScalar } from '../scalars/uuid.scalar';
+import { PaginationType } from './pagination.type';
 import { SubmissionType } from './submission.type';
 
 @ObjectType('Challenge')
