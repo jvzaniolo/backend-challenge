@@ -3,9 +3,9 @@ import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { GraphQLModule } from '@nestjs/graphql';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { CustomUuidScalar } from './core/scalar/uuid.scalar';
 import { EventsModule } from './infra/events/events.module';
 import { HttpModule } from './infra/http/http.module';
+import { CustomUuidScalar } from './infra/http/scalars/uuid.scalar';
 
 @Module({
   imports: [
