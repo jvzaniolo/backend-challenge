@@ -4,6 +4,7 @@ import { ConfigModule } from '@nestjs/config';
 import { GraphQLModule } from '@nestjs/graphql';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { CustomUuidScalar } from './common/scalar/uuid.scalar';
+import { EventsModule } from './infra/events/events.module';
 import { HttpModule } from './infra/http/http.module';
 
 @Module({
@@ -27,6 +28,7 @@ import { HttpModule } from './infra/http/http.module';
       synchronize: process.env.NODE_ENV !== 'production',
     }),
     HttpModule,
+    EventsModule,
   ],
 })
 export class AppModule {}
