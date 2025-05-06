@@ -1,7 +1,7 @@
 import { Field, Int, ObjectType } from '@nestjs/graphql';
 import { Pagination } from '~/core/pagination';
 
-@ObjectType()
+@ObjectType('Pagination')
 export class PaginationType implements Pagination {
   @Field(() => Int, { description: 'Total number of items' })
   total: number;

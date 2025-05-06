@@ -29,15 +29,15 @@ type Mutation {
 
 type PaginatedChallenge {
   items: [Challenge!]!
-  pagination: PaginationType!
+  pagination: Pagination!
 }
 
 type PaginatedSubmissions {
   items: [Submission!]!
-  pagination: PaginationType!
+  pagination: Pagination!
 }
 
-type PaginationType {
+type Pagination {
   page: Int!
 
   """Number of items per page"""
