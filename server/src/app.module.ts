@@ -3,9 +3,8 @@ import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { GraphQLModule } from '@nestjs/graphql';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { CustomUuidScalar } from './@core/scalar/uuid.scalar';
-import { ChallengesModule } from './challenges/challenges.module';
-import { SubmissionsModule } from './submissions/submissions.module';
+import { CustomUuidScalar } from './common/scalar/uuid.scalar';
+import { DomainModule } from './domain/domain.module';
 
 @Module({
   imports: [
@@ -27,10 +26,7 @@ import { SubmissionsModule } from './submissions/submissions.module';
       autoLoadEntities: true,
       synchronize: process.env.NODE_ENV !== 'production',
     }),
-    ChallengesModule,
-    SubmissionsModule,
+    DomainModule,
   ],
-  controllers: [],
-  providers: [],
 })
 export class AppModule {}
