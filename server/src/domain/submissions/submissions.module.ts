@@ -1,18 +1,17 @@
 import { Inject, Module, OnModuleDestroy, OnModuleInit } from '@nestjs/common';
 import { ClientKafka, ClientsModule, Transport } from '@nestjs/microservices';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { Challenge } from '../challenges/entities/challenge.entity';
 import { Submission } from './entities/submission.entity';
 import { SubmissionsRepository } from './repositories/typeorm/submissions.repository';
 import { SubmissionsController } from './submissions.controller';
-import { SubmissionsResolver } from './submissions.resolver';
-import { SubmissionsService } from './submissions.service';
 import { ListSubmissionsUseCase } from './use-cases/list-submissions/list-submissions';
 import { ListSubmissionsResolver } from './use-cases/list-submissions/list-submissions.resolver';
+import { SubmitChallengeUseCase } from './use-cases/submit-challenge/submit-challenge';
+import { SubmitChallengeResolver } from './use-cases/submit-challenge/submit-challenge.resolver';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([Challenge, Submission]),
+    TypeOrmModule.forFeature([Submission]),
     ClientsModule.register([
       {
         name: 'SUBMISSION_KAFKA',
@@ -35,8 +34,8 @@ import { ListSubmissionsResolver } from './use-cases/list-submissions/list-submi
     ListSubmissionsUseCase,
     ListSubmissionsResolver,
 
-    SubmissionsResolver,
-    SubmissionsService,
+    SubmitChallengeUseCase,
+    SubmitChallengeResolver,
   ],
 })
 export class SubmissionsModule implements OnModuleInit, OnModuleDestroy {

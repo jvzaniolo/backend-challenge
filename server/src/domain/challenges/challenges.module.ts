@@ -28,5 +28,6 @@ import { UpdateChallengeResolver } from './use-cases/update-challenge/update-cha
     ListChallengesUseCase,
     ListChallengesResolver,
   ],
+  exports: [ChallengesRepository],
 })
 export class ChallengesModule {}

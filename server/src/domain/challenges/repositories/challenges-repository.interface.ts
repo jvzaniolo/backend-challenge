@@ -4,6 +4,7 @@ export interface ChallengesRepositoryInterface {
   create(input: { title: string; description: string }): Promise<Challenge>;
   update(input: { id: string; title?: string; description?: string }): Promise<Challenge | null>;
   delete(input: { id: string }): Promise<Challenge | null>;
+  findBy(args: { id: string }): Promise<Challenge | null>;
   findMany(args: {
     perPage?: number;
     page?: number;

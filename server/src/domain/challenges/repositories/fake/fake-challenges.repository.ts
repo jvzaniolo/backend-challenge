@@ -40,6 +40,10 @@ export class FakeChallengesRepository implements ChallengesRepositoryInterface {
     return deletedChallenge;
   }
 
+  async findBy(input: { id: string }): Promise<Challenge | null> {
+    return this.challenges.find((challenge) => challenge.id === input.id) || null;
+  }
+
   async findMany({
     page,
     perPage,

@@ -45,6 +45,15 @@ export class ChallengesRepository implements ChallengesRepositoryInterface {
     return challenge;
   }
 
+  async findBy({ id }: { id: string }): Promise<Challenge | null> {
+    return this.challengeRepository.findOne({
+      where: { id },
+      relations: {
+        submissions: true,
+      },
+    });
+  }
+
   async findMany({
     page,
     perPage = 10,
