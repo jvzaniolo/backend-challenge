@@ -1,8 +1,7 @@
 import { randomUUID } from 'node:crypto';
 import { ChallengesRepository } from '../../../challenges/repositories/challenges.repository';
 import { FakeChallengesRepository } from '../../../challenges/repositories/fake/fake-challenges.repository';
-import { Submission } from '../../entities/submission';
-import { SubmissionStatus } from '../../entities/submission.interface';
+import { Submission, SubmissionStatus } from '../../entities/submission';
 import { FakeSubmissionsRepository } from '../../repositories/fake/fake-submissions.repository';
 import { SubmissionsRepository } from '../../repositories/submissions-repository.interface';
 import { ListSubmissionsUseCase } from './list-submissions';

@@ -1,6 +1,6 @@
 import { ChallengesRepository } from '../../../challenges/repositories/challenges.repository';
 import { FakeChallengesRepository } from '../../../challenges/repositories/fake/fake-challenges.repository';
-import { SubmissionStatus } from '../../entities/submission.interface';
+import { SubmissionStatus } from '../../entities/submission';
 import { FakeSubmissionsRepository } from '../../repositories/fake/fake-submissions.repository';
 import { SubmissionsRepository } from '../../repositories/submissions-repository.interface';
 import { SubmitChallengeUseCase } from './submit-challenge';
@@ -27,7 +27,7 @@ describe('Submit challenge use case', () => {
       description: 'Test Description',
     });
 
-    const submission = await sut.execute({
+    const { submission } = await sut.execute({
       challengeId: challenge.id,
       repositoryUrl: 'https://github.com/user/repo',
     });
