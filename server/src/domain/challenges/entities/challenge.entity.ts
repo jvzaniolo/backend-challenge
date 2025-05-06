@@ -1,8 +1,7 @@
 import { Field, ObjectType } from '@nestjs/graphql';
-import { Column, CreateDateColumn, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn } from 'typeorm';
 import { Pagination } from '~/common/pagination/pagination.type';
 import { CustomUuidScalar } from '~/common/scalar/uuid.scalar';
-import { Submission } from '~/domain/submissions/entities/submission.entity';
 
 @Entity()
 @ObjectType()
@@ -22,10 +21,6 @@ export class Challenge {
   @Field()
   @CreateDateColumn()
   createdAt: Date;
-
-  @Field(() => [Submission], { nullable: true })
-  @OneToMany(() => Submission, (submission) => submission.challenge)
-  submissions?: Submission[];
 }
 
 @ObjectType()

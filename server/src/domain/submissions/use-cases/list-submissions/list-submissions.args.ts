@@ -20,5 +20,5 @@ export class ListSubmissionsArgs extends PaginationArgs {
   dateRange?: DateRangeArgs;
 
   @Field({ nullable: true })
-  challengeTitle?: string;
+  challengeId?: string;
 }

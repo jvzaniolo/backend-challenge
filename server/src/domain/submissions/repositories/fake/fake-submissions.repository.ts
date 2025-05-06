@@ -49,13 +49,11 @@ export class FakeSubmissionsRepository implements SubmissionsRepositoryInterface
     perPage,
     status,
     dateRange,
-    challengeTitle,
+    challengeId,
   }: ListSubmissionsArgs): Promise<PaginatedSubmissions> {
     const filteredSubmissions = this.submissions.filter((submission) => {
       const matchesStatus = status ? submission.status === status : true;
-      const matchesChallengeTitle = challengeTitle
-        ? submission.challenge?.title.includes(challengeTitle)
-        : true;
+      const matchesChallengeTitle = challengeId ? submission.challengeId === challengeId : true;
       const matchesDateRange =
         dateRange &&
         submission.createdAt >= dateRange.startDate &&
