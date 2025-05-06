@@ -1,12 +1,9 @@
 import { Args, Query, Resolver } from '@nestjs/graphql';
 import { ListSubmissionsUseCase } from '~/domain/submissions/use-cases/list-submissions/list-submissions';
-import {
-  GraphQLSubmission,
-  PaginatedSubmissions,
-} from '~/infra/database/typeorm/entities/submission.entity';
+import { PaginatedSubmissions, SubmissionType } from '../object-types/submission.type';
 import { ListSubmissionsArgs } from './list-submissions.args';
 
-@Resolver(() => GraphQLSubmission)
+@Resolver(() => SubmissionType)
 export class ListSubmissionsResolver {
   constructor(private readonly listSubmissionsUseCase: ListSubmissionsUseCase) {}
 

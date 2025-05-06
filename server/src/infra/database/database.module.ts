@@ -2,13 +2,13 @@ import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ChallengesRepository } from '~/domain/challenges/repositories/challenges.repository';
 import { SubmissionsRepository } from '~/domain/submissions/repositories/submissions-repository.interface';
-import { GraphQLChallenge } from './typeorm/entities/challenge.entity';
-import { GraphQLSubmission } from './typeorm/entities/submission.entity';
 import { TypeORMChallengesRepository } from './typeorm/repositories/challenges.repository';
 import { TypeORMSubmissionsRepository } from './typeorm/repositories/submissions.repository';
+import { ChallengeSchema } from './typeorm/schema/challenge.schema';
+import { SubmissionSchema } from './typeorm/schema/submission.schema';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([GraphQLSubmission, GraphQLChallenge])],
+  imports: [TypeOrmModule.forFeature([SubmissionSchema, ChallengeSchema])],
   providers: [
     {
       provide: ChallengesRepository,

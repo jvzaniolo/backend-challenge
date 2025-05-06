@@ -1,8 +1,8 @@
 import { Submission } from '~/domain/submissions/entities/submission';
-import { GraphQLSubmission } from '../entities/submission.entity';
+import { SubmissionSchema } from '../schema/submission.schema';
 
 export class SubmissionMapper {
-  static toDomain(entity: GraphQLSubmission): Submission {
+  static toDomain(entity: SubmissionSchema): Submission {
     return {
       id: entity.id,
       challengeId: entity.challengeId,
@@ -14,7 +14,7 @@ export class SubmissionMapper {
     };
   }
 
-  static toDatabase(domain: Submission): GraphQLSubmission {
+  static toDatabase(domain: Submission): SubmissionSchema {
     return {
       id: domain.id,
       challengeId: domain.challengeId,

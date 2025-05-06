@@ -3,14 +3,14 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { ILike, Repository } from 'typeorm';
 import { Challenge } from '~/domain/challenges/entities/challenge';
 import { ChallengesRepository } from '~/domain/challenges/repositories/challenges.repository';
-import { GraphQLChallenge } from '../entities/challenge.entity';
 import { ChallengeMapper } from '../mappers/challenge.mapper';
+import { ChallengeSchema } from '../schema/challenge.schema';
 
 @Injectable()
 export class TypeORMChallengesRepository implements ChallengesRepository {
   constructor(
-    @InjectRepository(GraphQLChallenge)
-    private readonly challengeRepository: Repository<GraphQLChallenge>,
+    @InjectRepository(ChallengeSchema)
+    private readonly challengeRepository: Repository<ChallengeSchema>,
   ) {}
 
   async create(input: { title: string; description: string }): Promise<Challenge> {

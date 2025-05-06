@@ -1,12 +1,9 @@
 import { Args, Query, Resolver } from '@nestjs/graphql';
 import { ListChallengesUseCase } from '~/domain/challenges/use-cases/list-challenges/list-challenges';
-import {
-  GraphQLChallenge,
-  PaginatedChallenge,
-} from '~/infra/database/typeorm/entities/challenge.entity';
+import { ChallengeType, PaginatedChallenge } from '../object-types/challenge.type';
 import { ListChallengesArgs } from './list-challenges.args';
 
-@Resolver(() => GraphQLChallenge)
+@Resolver(() => ChallengeType)
 export class ListChallengesResolver {
   constructor(private listChallengesUseCase: ListChallengesUseCase) {}
 

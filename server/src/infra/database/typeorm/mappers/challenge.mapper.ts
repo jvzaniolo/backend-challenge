@@ -1,8 +1,8 @@
 import { Challenge } from '~/domain/challenges/entities/challenge';
-import { GraphQLChallenge } from '../entities/challenge.entity';
+import { ChallengeSchema } from '../schema/challenge.schema';
 
 export class ChallengeMapper {
-  static toDomain(entity: GraphQLChallenge): Challenge {
+  static toDomain(entity: ChallengeSchema): Challenge {
     return Challenge.create({
       id: entity.id,
       title: entity.title,
@@ -12,8 +12,8 @@ export class ChallengeMapper {
     });
   }
 
-  static toDatabase(domain: Challenge): GraphQLChallenge {
-    const entity = new GraphQLChallenge();
+  static toDatabase(domain: Challenge): ChallengeSchema {
+    const entity = new ChallengeSchema();
     entity.id = domain.id;
     entity.title = domain.title;
     entity.description = domain.description;

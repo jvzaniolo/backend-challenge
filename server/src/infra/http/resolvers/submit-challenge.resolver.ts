@@ -1,16 +1,16 @@
 import { Args, Mutation, Resolver } from '@nestjs/graphql';
 import { SubmitChallengeUseCase } from '~/domain/submissions/use-cases/submit-challenge/submit-challenge';
-import { GraphQLSubmission } from '~/infra/database/typeorm/entities/submission.entity';
+import { SubmissionType } from '../object-types/submission.type';
 
-@Resolver(() => GraphQLSubmission)
+@Resolver(() => SubmissionType)
 export class SubmitChallengeResolver {
   constructor(private readonly submitChallengeUseCase: SubmitChallengeUseCase) {}
 
-  @Mutation(() => GraphQLSubmission)
+  @Mutation(() => SubmissionType)
   async submitChallenge(
     @Args('challengeId') challengeId: string,
     @Args('repositoryUrl') repositoryUrl: string,
-  ): Promise<GraphQLSubmission> {
+  ): Promise<SubmissionType> {
     return this.submitChallengeUseCase.execute({
       challengeId,
       repositoryUrl,

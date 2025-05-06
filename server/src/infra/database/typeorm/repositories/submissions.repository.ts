@@ -3,42 +3,26 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Between, ILike, Repository } from 'typeorm';
 import { SubmissionStatus } from '~/domain/submissions/entities/submission.interface';
 import { SubmissionsRepository } from '~/domain/submissions/repositories/submissions-repository.interface';
-import {
-  GraphQLSubmission,
-  PaginatedSubmissions,
-} from '~/infra/database/typeorm/entities/submission.entity';
+import { SubmissionMapper } from '../mappers/submission.mapper';
+import { SubmissionSchema } from '../schema/submission.schema';
 
 @Injectable()
 export class TypeORMSubmissionsRepository implements SubmissionsRepository {
   constructor(
-    @InjectRepository(GraphQLSubmission)
-    private readonly submissionRepository: Repository<GraphQLSubmission>,
+    @InjectRepository(SubmissionSchema)
+    private readonly submissionRepository: Repository<SubmissionSchema>,
   ) {}
 
-  async create({
-    challengeId,
-    repositoryUrl,
-  }: {
-    challengeId: string;
-    repositoryUrl: string;
-  }): Promise<GraphQLSubmission> {
+  async create({ challengeId, repositoryUrl }: { challengeId: string; repositoryUrl: string }) {
     const submission = this.submissionRepository.create({
       challengeId,
       repositoryUrl,
     });
-
-    return this.submissionRepository.save(submission);
+    await this.submissionRepository.save(submission);
+    return SubmissionMapper.toDomain(submission);
   }
 
-  async update({
-    id,
-    status,
-    grade,
-  }: {
-    id: string;
-    status?: SubmissionStatus;
-    grade?: number;
-  }): Promise<GraphQLSubmission | null> {
+  async update({ id, status, grade }: { id: string; status?: SubmissionStatus; grade?: number }) {
     const submission = await this.submissionRepository.findOneBy({ id });
 
     if (!submission) {
@@ -50,16 +34,21 @@ export class TypeORMSubmissionsRepository implements SubmissionsRepository {
       grade,
     });
 
-    return this.submissionRepository.save(submission);
+    const updatedSubmission = await this.submissionRepository.save(submission);
+    return SubmissionMapper.toDomain(updatedSubmission);
   }
 
-  async findBy({ id }: { id: string }): Promise<GraphQLSubmission | null> {
-    return this.submissionRepository.findOne({
+  async findBy({ id }: { id: string }) {
+    const submission = await this.submissionRepository.findOne({
       where: { id },
       relations: {
         challenge: true,
       },
     });
+    if (!submission) {
+      return null;
+    }
+    return SubmissionMapper.toDomain(submission);
   }
 
   async findMany({
@@ -74,7 +63,7 @@ export class TypeORMSubmissionsRepository implements SubmissionsRepository {
     status?: SubmissionStatus;
     dateRange?: { startDate: Date; endDate: Date };
     challengeTitle?: string;
-  }): Promise<PaginatedSubmissions> {
+  }) {
     const [items, count] = await this.submissionRepository.findAndCount({
       skip: page ? (page - 1) * perPage : 0,
       take: perPage,
@@ -91,7 +80,7 @@ export class TypeORMSubmissionsRepository implements SubmissionsRepository {
     });
 
     return {
-      items,
+      items: items.map(SubmissionMapper.toDomain),
       pagination: {
         page: page || 1,
         perPage,
