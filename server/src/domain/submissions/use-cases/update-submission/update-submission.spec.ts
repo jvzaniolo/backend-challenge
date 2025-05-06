@@ -66,4 +66,20 @@ describe('Update submission use case', () => {
       }),
     );
   });
+
+  it('should throw an error if submission not found', async () => {
+    const challengeId = randomUUID();
+    await submissionsRepository.create({
+      challengeId,
+      repositoryUrl: 'https://github.com/user/repo',
+    });
+
+    await expect(
+      sut.execute({
+        submissionId: randomUUID(),
+        status: SubmissionStatus.Done,
+        grade: 8,
+      }),
+    ).rejects.toThrow('Submission not found');
+  });
 });
