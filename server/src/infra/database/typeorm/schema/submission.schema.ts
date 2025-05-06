@@ -10,7 +10,7 @@ import { Challenge } from '~/domain/challenges/entities/challenge';
 import { SubmissionStatus } from '~/domain/submissions/entities/submission.interface';
 import { ChallengeSchema } from './challenge.schema';
 
-@Entity('Submission')
+@Entity('submission')
 export class SubmissionSchema {
   @PrimaryGeneratedColumn('uuid')
   id: string;

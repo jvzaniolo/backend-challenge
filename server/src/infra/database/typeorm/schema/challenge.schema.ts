@@ -2,7 +2,7 @@ import { Column, CreateDateColumn, Entity, OneToMany, PrimaryGeneratedColumn } f
 import { Submission } from '~/domain/submissions/entities/submission';
 import { SubmissionSchema } from './submission.schema';
 
-@Entity('Challenge')
+@Entity('challenge')
 export class ChallengeSchema {
   @PrimaryGeneratedColumn('uuid')
   id: string;

@@ -1,7 +1,7 @@
 import { Field, ObjectType } from '@nestjs/graphql';
 import { Challenge } from '~/domain/challenges/entities/challenge';
 import { Submission } from '~/domain/submissions/entities/submission';
-import { Pagination } from '~/infra/http/object-types/pagination.type';
+import { PaginationType } from '~/infra/http/object-types/pagination.type';
 import { CustomUuidScalar } from '~/infra/http/scalars/uuid.scalar';
 import { SubmissionType } from './submission.type';
 
@@ -28,6 +28,6 @@ export class PaginatedChallenge {
   @Field(() => [ChallengeType])
   items: Challenge[];
 
-  @Field(() => Pagination)
-  pagination: Pagination;
+  @Field(() => PaginationType)
+  pagination: PaginationType;
 }
