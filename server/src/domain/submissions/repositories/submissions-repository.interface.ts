@@ -1,13 +1,20 @@
-import { PaginatedSubmissions, Submission, SubmissionStatus } from '../entities/submission.entity';
-import { ListSubmissionsArgs } from '../use-cases/list-submissions/list-submissions.args';
+import { Paginated, PaginatedArgs } from '~/core/pagination';
+import { Submission } from '../entities/submission';
+import { SubmissionStatus } from '../entities/submission.interface';
 
-export interface SubmissionsRepositoryInterface {
-  create(args: { challengeId: string; repositoryUrl: string }): Promise<Submission>;
-  update(args: {
+export abstract class SubmissionsRepository {
+  abstract create(args: { challengeId: string; repositoryUrl: string }): Promise<Submission>;
+  abstract update(args: {
     id: string;
     status?: SubmissionStatus;
     grade?: number;
   }): Promise<Submission | null>;
-  findBy(args: { id: string }): Promise<Submission | null>;
-  findMany(args: ListSubmissionsArgs): Promise<PaginatedSubmissions>;
+  abstract findBy(args: { id: string }): Promise<Submission | null>;
+  abstract findMany(
+    args: {
+      status?: SubmissionStatus;
+      dateRange?: { startDate: Date; endDate: Date };
+      challengeTitle?: string;
+    } & PaginatedArgs,
+  ): Promise<Paginated<Submission>>;
 }

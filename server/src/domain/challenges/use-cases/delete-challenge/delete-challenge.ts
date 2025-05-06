@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { ChallengesRepository } from '../../repositories/typeorm/challenges.repository';
+import { ChallengesRepository } from '../../repositories/challenges.repository';
 
 @Injectable()
 export class DeleteChallengeUseCase {

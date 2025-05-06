@@ -1,16 +1,15 @@
-import { Inject, Injectable } from '@nestjs/common';
-import { ClientKafkaProxy } from '@nestjs/microservices';
-import { isGithubRepo } from '~/common/utils/is-github-repo';
-import { ChallengesRepository } from '~/domain/challenges/repositories/typeorm/challenges.repository';
-import { Submission, SubmissionStatus } from '../../entities/submission.entity';
-import { SubmissionsRepository } from '../../repositories/typeorm/submissions.repository';
+import { Injectable } from '@nestjs/common';
+import { DomainEvents } from '~/core/events/domain-events';
+import { isGithubRepo } from '~/domain/submissions/utils/is-github-repo';
+import { ChallengesRepository } from '../../../challenges/repositories/challenges.repository';
+import { Submission } from '../../entities/submission';
+import { SubmissionStatus } from '../../entities/submission.interface';
+import { SubmitChallengeEvent } from '../../events/submit-challenge.event';
+import { SubmissionsRepository } from '../../repositories/submissions-repository.interface';
 
 @Injectable()
 export class SubmitChallengeUseCase {
   constructor(
-    @Inject('SUBMISSION_KAFKA')
-    private readonly submissionKafkaClient: ClientKafkaProxy,
-
     private readonly challengesRepository: ChallengesRepository,
 
     private readonly submissionsRepository: SubmissionsRepository,
@@ -46,12 +45,7 @@ export class SubmitChallengeUseCase {
       throw new Error('Challenge not found.');
     }
 
-    this.submissionKafkaClient
-      .send('challenge.correction', {
-        submissionId: submission.id,
-        repositoryUrl: submission.repositoryUrl,
-      })
-      .subscribe();
+    DomainEvents.dispatch(new SubmitChallengeEvent(submission.id, submission.repositoryUrl));
 
     return submission;
   }

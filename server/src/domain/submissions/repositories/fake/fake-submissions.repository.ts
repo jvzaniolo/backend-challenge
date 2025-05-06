@@ -1,26 +1,14 @@
-import { randomUUID } from 'node:crypto';
-import {
-  PaginatedSubmissions,
-  Submission,
-  SubmissionStatus,
-} from '../../entities/submission.entity';
-import { ListSubmissionsArgs } from '../../use-cases/list-submissions/list-submissions.args';
-import { SubmissionsRepositoryInterface } from '../submissions-repository.interface';
+import { Submission } from '../../entities/submission';
+import { SubmissionStatus } from '../../entities/submission.interface';
+import { SubmissionsRepository } from '../submissions-repository.interface';
 
-export class FakeSubmissionsRepository implements SubmissionsRepositoryInterface {
+export class FakeSubmissionsRepository implements SubmissionsRepository {
   private submissions: Submission[] = [];
 
-  async create(input: { challengeId: string; repositoryUrl: string }): Promise<Submission> {
-    const submission: Submission = {
-      id: randomUUID(),
-      status: SubmissionStatus.Pending,
-      createdAt: new Date(),
-      grade: null,
-      ...input,
-    };
-
-    this.submissions.push(submission);
-    return submission;
+  async create(submission: Submission): Promise<Submission> {
+    const newSubmission = Submission.create(submission);
+    this.submissions.push(newSubmission);
+    return newSubmission;
   }
 
   async update(input: {
@@ -49,7 +37,13 @@ export class FakeSubmissionsRepository implements SubmissionsRepositoryInterface
     status,
     dateRange,
     challengeTitle,
-  }: ListSubmissionsArgs): Promise<PaginatedSubmissions> {
+  }: {
+    page?: number;
+    perPage: number;
+    status?: SubmissionStatus;
+    dateRange?: { startDate: Date; endDate: Date };
+    challengeTitle?: string;
+  }) {
     const filteredSubmissions = this.submissions.filter((submission) => {
       const matchesStatus = status ? submission.status === status : true;
       const matchesChallengeTitle = challengeTitle

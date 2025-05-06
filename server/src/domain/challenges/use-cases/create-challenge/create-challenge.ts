@@ -1,12 +1,14 @@
 import { Injectable } from '@nestjs/common';
-import { ChallengesRepository } from '../../repositories/typeorm/challenges.repository';
+import { Challenge } from '../../entities/challenge';
+import { ChallengesRepository } from '../../repositories/challenges.repository';
 
 @Injectable()
 export class CreateChallengeUseCase {
   constructor(private readonly challengeRepository: ChallengesRepository) {}
 
-  async execute(input: { title: string; description: string }) {
-    const challenge = await this.challengeRepository.create(input);
+  async execute(data: { title: string; description: string }) {
+    const challenge = Challenge.create(data);
+    await this.challengeRepository.create(challenge);
     return { challenge };
   }
 }

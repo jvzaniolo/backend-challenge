@@ -1,45 +1,20 @@
-import { ClientKafkaProxy } from '@nestjs/microservices';
-import { Test } from '@nestjs/testing';
-import { FakeChallengesRepository } from '~/domain/challenges/repositories/fake/fake-challenges.repository';
-import { ChallengesRepository } from '~/domain/challenges/repositories/typeorm/challenges.repository';
-import { SubmissionStatus } from '../../entities/submission.entity';
+import { ChallengesRepository } from '../../../challenges/repositories/challenges.repository';
+import { FakeChallengesRepository } from '../../../challenges/repositories/fake/fake-challenges.repository';
+import { SubmissionStatus } from '../../entities/submission.interface';
 import { FakeSubmissionsRepository } from '../../repositories/fake/fake-submissions.repository';
-import { SubmissionsRepository } from '../../repositories/typeorm/submissions.repository';
+import { SubmissionsRepository } from '../../repositories/submissions-repository.interface';
 import { SubmitChallengeUseCase } from './submit-challenge';
 
 describe('Submit challenge use case', () => {
   let sut: SubmitChallengeUseCase;
   let challengesRepository: ChallengesRepository;
   let submissionsRepository: SubmissionsRepository;
-  let kafkaClient: ClientKafkaProxy;
 
   beforeEach(async () => {
-    const module = await Test.createTestingModule({
-      providers: [
-        SubmitChallengeUseCase,
-        {
-          provide: SubmissionsRepository,
-          useClass: FakeSubmissionsRepository,
-        },
-        {
-          provide: ChallengesRepository,
-          useClass: FakeChallengesRepository,
-        },
-        {
-          provide: 'SUBMISSION_KAFKA',
-          useValue: {
-            send: jest.fn().mockReturnValue({
-              subscribe: jest.fn(),
-            }),
-          },
-        },
-      ],
-    }).compile();
+    challengesRepository = new FakeChallengesRepository();
+    submissionsRepository = new FakeSubmissionsRepository();
 
-    sut = module.get(SubmitChallengeUseCase);
-    kafkaClient = module.get('SUBMISSION_KAFKA');
-    challengesRepository = module.get(ChallengesRepository);
-    submissionsRepository = module.get(SubmissionsRepository);
+    sut = new SubmitChallengeUseCase(challengesRepository, submissionsRepository);
   });
 
   it('should be defined', () => {
@@ -104,25 +79,5 @@ describe('Submit challenge use case', () => {
         status: SubmissionStatus.Error,
       }),
     ]);
-  });
-
-  it('should send a message to the Kafka topic `challenge.correction`', async () => {
-    const challenge = await challengesRepository.create({
-      title: 'Test Challenge',
-      description: 'Test Description',
-    });
-
-    const submission = await sut.execute({
-      challengeId: challenge.id,
-      repositoryUrl: 'https://github.com/user/repo',
-    });
-
-    const sendSpy = jest.spyOn(kafkaClient, 'send');
-
-    expect(sendSpy).toHaveBeenCalledWith('challenge.correction', {
-      submissionId: submission.id,
-      repositoryUrl: submission.repositoryUrl,
-    });
-    expect(sendSpy).toHaveBeenCalledTimes(1);
   });
 });

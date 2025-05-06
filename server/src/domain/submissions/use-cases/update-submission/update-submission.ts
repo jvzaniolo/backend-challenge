@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
-import { Submission, SubmissionStatus } from '../../entities/submission.entity';
-import { SubmissionsRepository } from '../../repositories/typeorm/submissions.repository';
+import { Submission } from '../../entities/submission';
+import { SubmissionStatus } from '../../entities/submission.interface';
+import { SubmissionsRepository } from '../../repositories/submissions-repository.interface';
 
 @Injectable()
 export class UpdateSubmissionUseCase {
