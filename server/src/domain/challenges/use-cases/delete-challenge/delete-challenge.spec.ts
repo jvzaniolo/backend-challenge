@@ -26,29 +26,27 @@ describe('Delete challenge use case', () => {
     expect(sut).toBeDefined();
   });
 
-  it('should delete a new challenge', async () => {
+  it('should delete a challenge', async () => {
     const newChallenge = await challengesRepository.create({
       title: 'Back-end Challenge',
       description: 'This is a back-end challenge',
     });
 
     await expect(
-      challengesRepository.findMany({
-        title: 'Back-end Challenge',
-        perPage: 10,
+      challengesRepository.findBy({
+        id: newChallenge.id,
       }),
-    ).resolves.toEqual([newChallenge]);
+    ).resolves.toBeDefined();
 
     await sut.execute({
       id: newChallenge.id,
     });
 
     await expect(
-      challengesRepository.findMany({
-        title: 'Back-end Challenge',
-        perPage: 10,
+      challengesRepository.findBy({
+        id: newChallenge.id,
       }),
-    ).resolves.toEqual([]);
+    ).resolves.toBeNull();
   });
 
   it('should throw an error if the challenge does not exist', async () => {

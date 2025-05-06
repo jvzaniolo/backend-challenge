@@ -26,7 +26,7 @@ describe('Update challenge use case', () => {
     expect(sut).toBeDefined();
   });
 
-  it('should update a new challenge', async () => {
+  it('should update a challenge', async () => {
     const newChallenge = await challengesRepository.create({
       title: 'Back-end Challenge',
       description: 'This is a back-end challenge',
