@@ -1,11 +1,11 @@
 import { Controller } from '@nestjs/common';
 import { MessagePattern, Payload } from '@nestjs/microservices';
-import { SubmissionStatus } from './entities/submission.entity';
-import { SubmissionsService } from './submissions.service';
+import { SubmissionStatus } from '../../entities/submission.entity';
+import { UpdateSubmissionUseCase } from './update-submission';
 
 @Controller()
-export class SubmissionsController {
-  constructor(private readonly submissionsService: SubmissionsService) {}
+export class UpdateSubmissionController {
+  constructor(private readonly updateSubmissionUseCase: UpdateSubmissionUseCase) {}
 
   @MessagePattern('challenge.correction.reply')
   async handle(
@@ -17,6 +17,6 @@ export class SubmissionsController {
       repositoryUrl: string;
     },
   ) {
-    await this.submissionsService.update(data);
+    await this.updateSubmissionUseCase.execute(data);
   }
 }

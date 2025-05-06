@@ -1,16 +1,19 @@
 import { Inject, Module, OnModuleDestroy, OnModuleInit } from '@nestjs/common';
 import { ClientKafka, ClientsModule, Transport } from '@nestjs/microservices';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { ChallengesModule } from '../challenges/challenges.module';
 import { Submission } from './entities/submission.entity';
 import { SubmissionsRepository } from './repositories/typeorm/submissions.repository';
-import { SubmissionsController } from './submissions.controller';
 import { ListSubmissionsUseCase } from './use-cases/list-submissions/list-submissions';
 import { ListSubmissionsResolver } from './use-cases/list-submissions/list-submissions.resolver';
 import { SubmitChallengeUseCase } from './use-cases/submit-challenge/submit-challenge';
 import { SubmitChallengeResolver } from './use-cases/submit-challenge/submit-challenge.resolver';
+import { UpdateSubmissionUseCase } from './use-cases/update-submission/update-submission';
+import { UpdateSubmissionController } from './use-cases/update-submission/update-submission.controller';
 
 @Module({
   imports: [
+    ChallengesModule,
     TypeOrmModule.forFeature([Submission]),
     ClientsModule.register([
       {
@@ -27,7 +30,6 @@ import { SubmitChallengeResolver } from './use-cases/submit-challenge/submit-cha
       },
     ]),
   ],
-  controllers: [SubmissionsController],
   providers: [
     SubmissionsRepository,
 
@@ -36,7 +38,10 @@ import { SubmitChallengeResolver } from './use-cases/submit-challenge/submit-cha
 
     SubmitChallengeUseCase,
     SubmitChallengeResolver,
+
+    UpdateSubmissionUseCase,
   ],
+  controllers: [UpdateSubmissionController],
 })
 export class SubmissionsModule implements OnModuleInit, OnModuleDestroy {
   constructor(

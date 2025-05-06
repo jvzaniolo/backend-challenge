@@ -1,3 +1,4 @@
+import { randomUUID } from 'node:crypto';
 import {
   PaginatedSubmissions,
   Submission,
@@ -8,6 +9,24 @@ import { SubmissionsRepositoryInterface } from '../submissions-repository.interf
 
 export class FakeSubmissionsRepository implements SubmissionsRepositoryInterface {
   private submissions: Submission[] = [];
+
+  async create({
+    challengeId,
+    repositoryUrl,
+  }: {
+    challengeId: string;
+    repositoryUrl: string;
+  }): Promise<Submission> {
+    const submission = new Submission();
+    submission.id = randomUUID();
+    submission.challengeId = challengeId;
+    submission.repositoryUrl = repositoryUrl;
+    submission.status = SubmissionStatus.Pending;
+    submission.createdAt = new Date();
+
+    this.submissions.push(submission);
+    return submission;
+  }
 
   async update(input: {
     id: string;
