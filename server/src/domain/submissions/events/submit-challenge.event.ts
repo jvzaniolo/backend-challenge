@@ -1,4 +1,4 @@
-import { DomainEvent } from '~/@core/events/domain-events';
+import { DomainEvent } from '~/core/events/domain-events';
 
 export class SubmitChallengeEvent implements DomainEvent {
   occurredOn: Date;

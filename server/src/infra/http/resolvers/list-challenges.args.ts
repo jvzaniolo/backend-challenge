@@ -1,5 +1,5 @@
 import { ArgsType, Field } from '@nestjs/graphql';
-import { PaginationArgs } from '~/common/pagination/pagination.args';
+import { PaginationArgs } from '~/core/pagination/pagination.args';
 
 @ArgsType()
 export class ListChallengesArgs extends PaginationArgs {

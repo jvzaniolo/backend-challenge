@@ -1,7 +1,7 @@
 import { Field, ObjectType } from '@nestjs/graphql';
 import { Column, CreateDateColumn, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
-import { Pagination } from '~/common/pagination/pagination.type';
-import { CustomUuidScalar } from '~/common/scalar/uuid.scalar';
+import { Pagination } from '~/core/pagination/pagination.type';
+import { CustomUuidScalar } from '~/core/scalar/uuid.scalar';
 import { Submission } from '~/domain/submissions/entities/submission.entity';
 
 @Entity()

@@ -1,6 +1,6 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { ClientKafkaProxy } from '@nestjs/microservices';
-import { DomainEvents } from '~/@core/events/domain-events';
+import { DomainEvents } from '~/core/events/domain-events';
 import { SubmitChallengeEvent } from '~/domain/submissions/events/submit-challenge.event';
 
 @Injectable()

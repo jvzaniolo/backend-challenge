@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
-import { DomainEvents } from '~/@core/events/domain-events';
-import { isGithubRepo } from '~/common/utils/is-github-repo';
+import { DomainEvents } from '~/core/events/domain-events';
+import { isGithubRepo } from '~/domain/submissions/utils/is-github-repo';
 import { ChallengesRepository } from '../../../challenges/repositories/challenges.repository';
 import { Submission, SubmissionStatus } from '../../entities/submission.entity';
 import { SubmitChallengeEvent } from '../../events/submit-challenge.event';

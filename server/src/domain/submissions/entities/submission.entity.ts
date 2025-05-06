@@ -7,8 +7,8 @@ import {
   ManyToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
-import { Pagination } from '~/common/pagination/pagination.type';
-import { CustomUuidScalar } from '~/common/scalar/uuid.scalar';
+import { Pagination } from '~/core/pagination/pagination.type';
+import { CustomUuidScalar } from '~/core/scalar/uuid.scalar';
 import { Challenge } from '~/domain/challenges/entities/challenge.entity';
 
 export enum SubmissionStatus {
