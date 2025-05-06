@@ -1,6 +1,5 @@
-import { Inject, Module, OnModuleDestroy, OnModuleInit } from '@nestjs/common';
+import { Module } from '@nestjs/common';
 
-import { ClientKafka, ClientsModule, Transport } from '@nestjs/microservices';
 import { CreateChallengeUseCase } from '~/domain/challenges/use-cases/create-challenge/create-challenge';
 import { DeleteChallengeUseCase } from '~/domain/challenges/use-cases/delete-challenge/delete-challenge';
 import { ListChallengesUseCase } from '~/domain/challenges/use-cases/list-challenges/list-challenges';
@@ -18,23 +17,7 @@ import { SubmitChallengeResolver } from './resolvers/submit-challenge.resolver';
 import { UpdateChallengeResolver } from './resolvers/update-challenge.resolver';
 
 @Module({
-  imports: [
-    DatabaseModule,
-    ClientsModule.register([
-      {
-        name: 'SUBMISSION_KAFKA',
-        transport: Transport.KAFKA,
-        options: {
-          client: {
-            brokers: ['localhost:9092'],
-          },
-          consumer: {
-            groupId: 'submission-consumer',
-          },
-        },
-      },
-    ]),
-  ],
+  imports: [DatabaseModule],
   controllers: [UpdateSubmissionController],
   providers: [
     CreateChallengeUseCase,
@@ -58,18 +41,4 @@ import { UpdateChallengeResolver } from './resolvers/update-challenge.resolver';
     UpdateSubmissionUseCase,
   ],
 })
-export class HttpModule implements OnModuleInit, OnModuleDestroy {
-  constructor(
-    @Inject('SUBMISSION_KAFKA')
-    private readonly client: ClientKafka,
-  ) {}
-
-  async onModuleInit() {
-    this.client.subscribeToResponseOf('challenge.correction');
-    await this.client.connect();
-  }
-
-  async onModuleDestroy() {
-    await this.client.close();
-  }
-}
+export class HttpModule {}
