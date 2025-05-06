@@ -77,7 +77,6 @@ describe('Submit challenge use case', () => {
     ).rejects.toThrow('Invalid GitHub repository URL.');
 
     const submission = await submissionsRepository.findMany({
-      challengeId: challenge.id,
       perPage: 1,
     });
 
@@ -97,10 +96,7 @@ describe('Submit challenge use case', () => {
       }),
     ).rejects.toThrow('Challenge not found.');
 
-    const submission = await submissionsRepository.findMany({
-      challengeId: 'non-existing-challenge-id',
-      perPage: 1,
-    });
+    const submission = await submissionsRepository.findMany({ perPage: 10 });
 
     expect(submission).toBeDefined();
     expect(submission.items).toEqual([

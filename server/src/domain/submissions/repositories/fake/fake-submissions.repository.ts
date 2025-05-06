@@ -39,6 +39,10 @@ export class FakeSubmissionsRepository implements SubmissionsRepositoryInterface
     return submission;
   }
 
+  async findBy(input: { id: string }): Promise<Submission | null> {
+    return this.submissions.find((submission) => submission.id === input.id) || null;
+  }
+
   async findMany({
     page,
     perPage,

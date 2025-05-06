@@ -43,7 +43,7 @@ export class Submission {
 
   @Field(() => Float, { nullable: true })
   @Column({ nullable: true, type: 'float' })
-  grade?: number;
+  grade?: number | null;
 
   @Field(() => SubmissionStatus)
   @Column({ type: 'enum', enum: SubmissionStatus, default: SubmissionStatus.Pending })

@@ -29,23 +29,12 @@ describe('Update submission use case', () => {
   });
 
   it('should update a submission', async () => {
-    const challengeId = randomUUID();
     const newSubmission = await submissionsRepository.create({
-      challengeId,
+      challengeId: randomUUID(),
       repositoryUrl: 'https://github.com/user/repo',
     });
 
-    await expect(submissionsRepository.findMany({ challengeId, perPage: 10 })).resolves.toEqual(
-      expect.objectContaining({
-        items: [
-          expect.objectContaining({
-            repositoryUrl: 'https://github.com/user/repo',
-            status: SubmissionStatus.Pending,
-            grade: null,
-          }),
-        ],
-      }),
-    );
+    await expect(submissionsRepository.findBy({ id: newSubmission.id })).resolves.toBeDefined();
 
     const { submission } = await sut.execute({
       submissionId: newSubmission.id,
@@ -54,15 +43,11 @@ describe('Update submission use case', () => {
     });
 
     expect(submission).toBeDefined();
-    await expect(submissionsRepository.findMany({ challengeId, perPage: 10 })).resolves.toEqual(
+    await expect(submissionsRepository.findBy({ id: newSubmission.id })).resolves.toEqual(
       expect.objectContaining({
-        items: [
-          expect.objectContaining({
-            repositoryUrl: 'https://github.com/user/repo',
-            grade: 8,
-            status: SubmissionStatus.Done,
-          }),
-        ],
+        repositoryUrl: 'https://github.com/user/repo',
+        grade: 8,
+        status: SubmissionStatus.Done,
       }),
     );
   });

@@ -1,5 +1,7 @@
 import { Test } from '@nestjs/testing';
 import { randomUUID } from 'node:crypto';
+import { FakeChallengesRepository } from '~/domain/challenges/repositories/fake/fake-challenges.repository';
+import { ChallengesRepository } from '~/domain/challenges/repositories/typeorm/challenges.repository';
 import { Submission, SubmissionStatus } from '../../entities/submission.entity';
 import { FakeSubmissionsRepository } from '../../repositories/fake/fake-submissions.repository';
 import { SubmissionsRepository } from '../../repositories/typeorm/submissions.repository';
@@ -19,6 +21,7 @@ function makeSubmission(overrides: Partial<Submission> = {}): Submission {
 
 describe('List submissions use case', () => {
   let sut: ListSubmissionsUseCase;
+  let challengesRepository: ChallengesRepository;
   let submissionsRepository: SubmissionsRepository;
 
   beforeEach(async () => {
@@ -29,10 +32,15 @@ describe('List submissions use case', () => {
           provide: SubmissionsRepository,
           useClass: FakeSubmissionsRepository,
         },
+        {
+          provide: ChallengesRepository,
+          useClass: FakeChallengesRepository,
+        },
       ],
     }).compile();
 
     sut = module.get(ListSubmissionsUseCase);
+    challengesRepository = module.get(ChallengesRepository);
     submissionsRepository = module.get(SubmissionsRepository);
   });
 
@@ -101,14 +109,23 @@ describe('List submissions use case', () => {
     );
   });
 
-  it('should filter submissions by challengeId', async () => {
-    const challengeId = randomUUID();
-    await submissionsRepository.create({
-      challengeId,
-      repositoryUrl: 'https://github.com/example/repo-1',
+  it('should filter submissions by challengeTitle', async () => {
+    const challenge = await challengesRepository.create({
+      title: 'Test Challenge',
+      description: 'Test Description',
     });
+    makeSubmission({
+      challengeId: challenge.id,
+      challenge: challenge,
+    });
+    await submissionsRepository.create(
+      makeSubmission({
+        challengeId: challenge.id,
+        challenge: challenge,
+      }),
+    );
 
-    const result = await sut.execute({ challengeId, perPage: 10 });
+    const result = await sut.execute({ challengeTitle: 'Test Challenge', perPage: 10 });
 
     expect(result).toEqual(
       expect.objectContaining({
@@ -117,6 +134,9 @@ describe('List submissions use case', () => {
             grade: null,
             status: SubmissionStatus.Pending,
             repositoryUrl: 'https://github.com/example/repo-1',
+            challenge: expect.objectContaining({
+              title: 'Test Challenge',
+            }),
           }),
         ],
       }),

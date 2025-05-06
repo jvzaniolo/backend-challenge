@@ -54,6 +54,15 @@ export class SubmissionsRepository implements SubmissionsRepositoryInterface {
     return this.submissionRepository.save(submission);
   }
 
+  async findBy({ id }: { id: string }): Promise<Submission | null> {
+    return this.submissionRepository.findOne({
+      where: { id },
+      relations: {
+        challenge: true,
+      },
+    });
+  }
+
   async findMany({
     page,
     perPage,

@@ -8,5 +8,6 @@ export interface SubmissionsRepositoryInterface {
     status?: SubmissionStatus;
     grade?: number;
   }): Promise<Submission | null>;
+  findBy(args: { id: string }): Promise<Submission | null>;
   findMany(args: ListSubmissionsArgs): Promise<PaginatedSubmissions>;
 }
