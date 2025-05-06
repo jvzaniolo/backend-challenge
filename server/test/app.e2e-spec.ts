@@ -30,9 +30,11 @@ describe('AppController (e2e)', () => {
         query: `#graphql
           query {
             challenges {
-              id
-              title
-              description
+              items {
+                id
+                title
+                description
+              }
             }
           }
         `,
@@ -44,12 +46,27 @@ describe('AppController (e2e)', () => {
   });
 
   it('submitChallenge()', async () => {
+    const res = await request(app.getHttpServer())
+      .post(gql)
+      .send({
+        query: `#graphql
+          mutation {
+            createChallenge(title: "Test Challenge", description: "Test Description") {
+              id
+            }
+          }
+        `,
+      });
+
     await request(app.getHttpServer())
       .post(gql)
       .send({
         query: `#graphql
           mutation {
-            submitChallenge(challengeId: "67091500-b2d0-439d-b40f-a3d8e1c12545", repositoryUrl: "https://github.com/user/repo") {
+            submitChallenge(
+              challengeId: "${res.body.data.createChallenge.id}"
+              repositoryUrl: "https://github.com/user/repo"
+            ) {
               id
               grade
               status
