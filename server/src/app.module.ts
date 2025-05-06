@@ -4,8 +4,8 @@ import { ConfigModule } from '@nestjs/config';
 import { GraphQLModule } from '@nestjs/graphql';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { EventsModule } from './infra/events/events.module';
+import { CustomUuidScalar } from './infra/http/graphql/scalars/uuid.scalar';
 import { HttpModule } from './infra/http/http.module';
-import { CustomUuidScalar } from './infra/http/scalars/uuid.scalar';
 
 @Module({
   imports: [

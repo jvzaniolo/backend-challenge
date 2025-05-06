@@ -8,13 +8,13 @@ import { ListSubmissionsUseCase } from '~/domain/submissions/use-cases/list-subm
 import { SubmitChallengeUseCase } from '~/domain/submissions/use-cases/submit-challenge/submit-challenge';
 import { UpdateSubmissionUseCase } from '~/domain/submissions/use-cases/update-submission/update-submission';
 import { DatabaseModule } from '../database/database.module';
-import { UpdateSubmissionController } from './controllers/update-submission.controller';
-import { CreateChallengeResolver } from './resolvers/create-challenge.resolver';
-import { DeleteChallengeResolver } from './resolvers/delete-challenge.resolver';
-import { ListChallengesResolver } from './resolvers/list-challenges.resolver';
-import { ListSubmissionsResolver } from './resolvers/list-submissions.resolver';
-import { SubmitChallengeResolver } from './resolvers/submit-challenge.resolver';
-import { UpdateChallengeResolver } from './resolvers/update-challenge.resolver';
+import { CreateChallengeResolver } from './graphql/resolvers/create-challenge.resolver';
+import { DeleteChallengeResolver } from './graphql/resolvers/delete-challenge.resolver';
+import { ListChallengesResolver } from './graphql/resolvers/list-challenges.resolver';
+import { ListSubmissionsResolver } from './graphql/resolvers/list-submissions.resolver';
+import { SubmitChallengeResolver } from './graphql/resolvers/submit-challenge.resolver';
+import { UpdateChallengeResolver } from './graphql/resolvers/update-challenge.resolver';
+import { UpdateSubmissionController } from './rest/controllers/update-submission.controller';
 
 @Module({
   imports: [DatabaseModule],
