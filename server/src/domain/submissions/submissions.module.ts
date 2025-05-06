@@ -2,10 +2,13 @@ import { Inject, Module, OnModuleDestroy, OnModuleInit } from '@nestjs/common';
 import { ClientKafka, ClientsModule, Transport } from '@nestjs/microservices';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Challenge } from '../challenges/entities/challenge.entity';
-import { Submission } from './submission.entity';
+import { Submission } from './entities/submission.entity';
+import { SubmissionsRepository } from './repositories/typeorm/submissions.repository';
 import { SubmissionsController } from './submissions.controller';
 import { SubmissionsResolver } from './submissions.resolver';
 import { SubmissionsService } from './submissions.service';
+import { ListSubmissionsUseCase } from './use-cases/list-submissions/list-submissions';
+import { ListSubmissionsResolver } from './use-cases/list-submissions/list-submissions.resolver';
 
 @Module({
   imports: [
@@ -26,7 +29,15 @@ import { SubmissionsService } from './submissions.service';
     ]),
   ],
   controllers: [SubmissionsController],
-  providers: [SubmissionsResolver, SubmissionsService],
+  providers: [
+    SubmissionsRepository,
+
+    ListSubmissionsUseCase,
+    ListSubmissionsResolver,
+
+    SubmissionsResolver,
+    SubmissionsService,
+  ],
 })
 export class SubmissionsModule implements OnModuleInit, OnModuleDestroy {
   constructor(

@@ -1,6 +1,6 @@
 import { Controller } from '@nestjs/common';
 import { MessagePattern, Payload } from '@nestjs/microservices';
-import { SubmissionStatus } from './submission.entity';
+import { SubmissionStatus } from './entities/submission.entity';
 import { SubmissionsService } from './submissions.service';
 
 @Controller()

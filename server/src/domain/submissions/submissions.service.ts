@@ -1,11 +1,10 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { ClientKafkaProxy } from '@nestjs/microservices';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Between, ILike, Repository } from 'typeorm';
+import { Repository } from 'typeorm';
 import { isGithubRepo } from '~/common/utils/is-github-repo';
 import { Challenge } from '~/domain/challenges/entities/challenge.entity';
-import { GetSubmissionArgs } from './dto/get-submissions.args';
-import { PaginatedSubmissions, Submission, SubmissionStatus } from './submission.entity';
+import { Submission, SubmissionStatus } from './entities/submission.entity';
 
 @Injectable()
 export class SubmissionsService {
@@ -19,38 +18,6 @@ export class SubmissionsService {
     @InjectRepository(Submission)
     private readonly submissionsRepository: Repository<Submission>,
   ) {}
-
-  async findMany({
-    page,
-    perPage,
-    status,
-    dateRange,
-    challengeTitle,
-  }: GetSubmissionArgs): Promise<PaginatedSubmissions> {
-    const [items, count] = await this.submissionsRepository.findAndCount({
-      skip: page ? (page - 1) * perPage : 0,
-      take: perPage,
-      where: {
-        status,
-        createdAt: dateRange ? Between(dateRange.startDate, dateRange.endDate) : undefined,
-        challenge: {
-          title: challengeTitle ? ILike(`%${challengeTitle}%`) : undefined,
-        },
-      },
-      relations: {
-        challenge: true,
-      },
-    });
-
-    return {
-      items,
-      pagination: {
-        page: page || 1,
-        perPage,
-        total: count,
-      },
-    };
-  }
 
   private async create({
     challengeId,

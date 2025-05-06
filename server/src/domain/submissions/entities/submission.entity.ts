@@ -9,7 +9,7 @@ import {
 } from 'typeorm';
 import { Pagination } from '~/common/pagination/pagination.type';
 import { CustomUuidScalar } from '~/common/scalar/uuid.scalar';
-import { Challenge } from '../challenges/entities/challenge.entity';
+import { Challenge } from '~/domain/challenges/entities/challenge.entity';
 
 export enum SubmissionStatus {
   Pending = 'Pending',
