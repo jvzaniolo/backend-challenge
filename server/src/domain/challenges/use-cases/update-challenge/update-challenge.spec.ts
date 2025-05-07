@@ -24,14 +24,16 @@ describe('Update challenge use case', () => {
     });
     await challengesRepository.create(newChallenge);
 
-    const { challenge } = await sut.execute(newChallenge.id, {
+    await sut.execute(newChallenge.id, {
       title: 'Full-stack Challenge',
       description: 'This is a full-stack challenge',
     });
 
+    const challenge = await challengesRepository.findById(newChallenge.id);
+
     expect(challenge).toBeDefined();
-    expect(challenge.title).toBe('Full-stack Challenge');
-    expect(challenge.description).toBe('This is a full-stack challenge');
+    expect(challenge?.title).toBe('Full-stack Challenge');
+    expect(challenge?.description).toBe('This is a full-stack challenge');
   });
 
   it('should throw an error if the challenge does not exist', async () => {

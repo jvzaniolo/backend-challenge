@@ -26,10 +26,12 @@ describe('Update submission use case', () => {
     });
     await submissionsRepository.create(newSubmission);
 
-    const { submission } = await sut.execute(newSubmission.id, {
+    await sut.execute(newSubmission.id, {
       status: SubmissionStatus.Done,
       grade: 8,
     });
+
+    const submission = await submissionsRepository.findById(newSubmission.id);
 
     expect(submission).toEqual(
       expect.objectContaining({
