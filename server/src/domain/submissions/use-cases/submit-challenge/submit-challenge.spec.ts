@@ -1,9 +1,11 @@
+import { DomainEvents } from '~/core/events/domain-events';
 import { Challenge } from '~/domain/challenges/entities/challenge';
 import { ChallengeNotFoundError } from '~/domain/challenges/errors/challenge-not-found';
 import { ChallengesRepository } from '../../../challenges/repositories/challenges.repository';
 import { FakeChallengesRepository } from '../../../challenges/repositories/fake/fake-challenges.repository';
 import { SubmissionStatus } from '../../entities/submission';
 import { InvalidGitHubURLError } from '../../errors/invalid-github-url';
+import { SubmitChallengeEvent } from '../../events/submit-challenge.event';
 import { FakeSubmissionsRepository } from '../../repositories/fake/fake-submissions.repository';
 import { SubmissionsRepository } from '../../repositories/submissions-repository.interface';
 import { SubmitChallengeUseCase } from './submit-challenge';
@@ -84,5 +86,30 @@ describe('Submit challenge use case', () => {
         status: SubmissionStatus.Error,
       }),
     ]);
+  });
+
+  it('should dispatch the submit challenge event', async () => {
+    const challenge = Challenge.create({
+      title: 'Test Challenge',
+      description: 'Test Description',
+    });
+    await challengesRepository.create(challenge);
+
+    const dispatchSpy = jest.spyOn(DomainEvents, 'dispatch');
+
+    await sut.execute({
+      challengeId: challenge.id,
+      repositoryUrl: 'https://github.com/user/repo',
+    });
+
+    expect(dispatchSpy).toHaveBeenCalledWith(
+      SubmitChallengeEvent.name,
+      expect.objectContaining({
+        data: {
+          challengeId: challenge.id,
+          submissionId: expect.any(String),
+        },
+      }),
+    );
   });
 });
