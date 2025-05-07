@@ -1,4 +1,5 @@
 import { Challenge } from '../../entities/challenge';
+import { ChallengeNotFoundError } from '../../errors/challenge-not-found';
 import { ChallengesRepository } from '../../repositories/challenges.repository';
 import { FakeChallengesRepository } from '../../repositories/fake/fake-challenges.repository';
 import { DeleteChallengeUseCase } from './delete-challenge';
@@ -35,6 +36,6 @@ describe('Delete challenge use case', () => {
       sut.execute({
         id: 'non-existing-id',
       }),
-    ).rejects.toThrow('Challenge not found');
+    ).rejects.toBeInstanceOf(ChallengeNotFoundError);
   });
 });
