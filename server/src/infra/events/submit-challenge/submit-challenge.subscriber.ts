@@ -13,11 +13,6 @@ export class SubmitChallengeSubscriber {
   }
 
   async handleSubmitChallenge(event: SubmitChallengeEvent) {
-    this.submissionKafkaClient
-      .send('challenge.correction', {
-        submissionId: event.submissionId,
-        repositoryUrl: event.repositoryUrl,
-      })
-      .subscribe();
+    this.submissionKafkaClient.send('challenge.correction', event.data).subscribe();
   }
 }

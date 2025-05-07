@@ -1,6 +1,5 @@
 export interface DomainEvent {
   occurredOn: Date;
-  eventName: string;
 }
 
 export class DomainEvents {
@@ -13,8 +12,8 @@ export class DomainEvents {
     this.handlers[eventName].push(handler);
   }
 
-  static dispatch(event: DomainEvent): void {
-    const handlers = this.handlers[event.eventName] || [];
+  static dispatch(eventName: string, event: DomainEvent): void {
+    const handlers = this.handlers[eventName] || [];
     handlers.forEach((handler) => handler(event));
   }
 }

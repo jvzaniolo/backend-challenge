@@ -38,7 +38,13 @@ export class SubmitChallengeUseCase {
       throw new ChallengeNotFoundError();
     }
 
-    DomainEvents.dispatch(new SubmitChallengeEvent(submission.id, submission.repositoryUrl));
+    DomainEvents.dispatch(
+      SubmitChallengeEvent.name,
+      new SubmitChallengeEvent({
+        challengeId: challenge.id,
+        submissionId: submission.id,
+      }),
+    );
 
     return { submission };
   }
