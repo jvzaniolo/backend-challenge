@@ -25,8 +25,7 @@ describe('Update submission use case', () => {
     });
     await submissionsRepository.create(newSubmission);
 
-    const { submission } = await sut.execute({
-      submissionId: newSubmission.id,
+    const { submission } = await sut.execute(newSubmission.id, {
       status: SubmissionStatus.Done,
       grade: 8,
     });
@@ -51,8 +50,7 @@ describe('Update submission use case', () => {
     );
 
     await expect(
-      sut.execute({
-        submissionId: randomUUID(),
+      sut.execute('non-existing-id', {
         status: SubmissionStatus.Done,
         grade: 8,
       }),

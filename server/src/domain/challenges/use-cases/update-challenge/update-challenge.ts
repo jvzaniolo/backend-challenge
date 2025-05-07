@@ -5,11 +5,8 @@ import { ChallengesRepository } from '../../repositories/challenges.repository';
 export class UpdateChallengeUseCase {
   constructor(private readonly challengeRepository: ChallengesRepository) {}
 
-  async execute({ id, title, description }: { id: string; title?: string; description?: string }) {
-    const challenge = await this.challengeRepository.update(id, {
-      title,
-      description,
-    });
+  async execute(id: string, input: { title?: string; description?: string }) {
+    const challenge = await this.challengeRepository.update(id, input);
     if (!challenge) {
       throw new Error('Challenge not found');
     }

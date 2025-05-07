@@ -17,15 +17,13 @@ describe('Update challenge use case', () => {
   });
 
   it('should update a challenge', async () => {
-    const newChallenge = await challengesRepository.create(
-      Challenge.create({
-        title: 'Back-end Challenge',
-        description: 'This is a back-end challenge',
-      }),
-    );
+    const newChallenge = Challenge.create({
+      title: 'Back-end Challenge',
+      description: 'This is a back-end challenge',
+    });
+    await challengesRepository.create(newChallenge);
 
-    const { challenge } = await sut.execute({
-      id: newChallenge.id,
+    const { challenge } = await sut.execute(newChallenge.id, {
       title: 'Full-stack Challenge',
       description: 'This is a full-stack challenge',
     });
@@ -37,8 +35,7 @@ describe('Update challenge use case', () => {
 
   it('should throw an error if the challenge does not exist', async () => {
     await expect(
-      sut.execute({
-        id: 'non-existing-id',
+      sut.execute('non-existing-id', {
         title: 'Full-stack Challenge',
         description: 'This is a full-stack challenge',
       }),

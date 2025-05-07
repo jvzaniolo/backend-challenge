@@ -10,13 +10,20 @@ export class UpdateSubmissionController {
   @MessagePattern('challenge.correction.reply')
   async handle(
     @Payload()
-    data: {
+    {
+      submissionId,
+      status,
+      grade,
+    }: {
       submissionId: string;
       status: SubmissionStatus;
       grade: number;
       repositoryUrl: string;
     },
   ) {
-    await this.updateSubmissionUseCase.execute(data);
+    await this.updateSubmissionUseCase.execute(submissionId, {
+      status,
+      grade,
+    });
   }
 }

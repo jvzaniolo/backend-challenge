@@ -12,7 +12,7 @@ export class UpdateChallengeResolver {
     @Args('title', { nullable: true }) title?: string,
     @Args('description', { nullable: true }) description?: string,
   ): Promise<ChallengeType> {
-    const { challenge } = await this.updateChallengeUseCase.execute({ id, title, description });
+    const { challenge } = await this.updateChallengeUseCase.execute(id, { title, description });
     return challenge;
   }
 }

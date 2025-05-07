@@ -6,11 +6,8 @@ import { SubmissionsRepository } from '../../repositories/submissions-repository
 export class UpdateSubmissionUseCase {
   constructor(private readonly submissionsRepository: SubmissionsRepository) {}
 
-  async execute(args: { submissionId: string; status: SubmissionStatus; grade: number }) {
-    const submission = await this.submissionsRepository.update(args.submissionId, {
-      status: args.status,
-      grade: args.grade,
-    });
+  async execute(id: string, input: { status: SubmissionStatus; grade: number }) {
+    const submission = await this.submissionsRepository.update(id, input);
     if (!submission) {
       throw new Error('Submission not found.');
     }
