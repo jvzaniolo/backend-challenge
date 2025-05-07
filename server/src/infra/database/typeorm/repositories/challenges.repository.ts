@@ -18,8 +18,8 @@ export class TypeORMChallengesRepository implements ChallengesRepository {
     return ChallengeMapper.toDomain(await this.challengeRepository.save(challenge));
   }
 
-  async update(challenge: Partial<Challenge>) {
-    const data = await this.challengeRepository.findOneBy({ id: challenge.id });
+  async update(id: string, challenge: Partial<Challenge>) {
+    const data = await this.challengeRepository.findOneBy({ id });
     if (!data) {
       return null;
     }

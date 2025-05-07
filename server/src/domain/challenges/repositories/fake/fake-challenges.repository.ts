@@ -9,17 +9,14 @@ export class FakeChallengesRepository implements ChallengesRepository {
     return challenge;
   }
 
-  async update(challenge: Challenge) {
-    const challengeIndex = this.challenges.findIndex((item) => item.id === challenge.id);
+  async update(id: string, challenge: Partial<Challenge>) {
+    const challengeIndex = this.challenges.findIndex((item) => item.id === id);
 
     if (challengeIndex === -1) {
       return null;
     }
 
-    this.challenges[challengeIndex] = {
-      ...this.challenges[challengeIndex],
-      ...challenge,
-    } as Challenge;
+    this.challenges[challengeIndex] = Object.assign(this.challenges[challengeIndex], challenge);
 
     return this.challenges[challengeIndex];
   }

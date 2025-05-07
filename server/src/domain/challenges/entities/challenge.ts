@@ -31,8 +31,16 @@ export class Challenge {
     return this.props.title;
   }
 
+  set title(title: string) {
+    this.props.title = title;
+  }
+
   get description() {
     return this.props.description;
+  }
+
+  set description(description: string) {
+    this.props.description = description;
   }
 
   get createdAt() {
