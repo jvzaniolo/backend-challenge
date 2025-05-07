@@ -6,7 +6,6 @@ export class FakeChallengesRepository implements ChallengesRepository {
 
   async create(challenge: Challenge) {
     this.challenges.push(challenge);
-    return challenge;
   }
 
   async update(id: string, challenge: Partial<Challenge>) {

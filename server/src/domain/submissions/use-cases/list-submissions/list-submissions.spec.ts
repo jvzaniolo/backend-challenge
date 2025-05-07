@@ -97,12 +97,11 @@ describe('List submissions use case', () => {
   });
 
   it('should filter submissions by challengeTitle', async () => {
-    const challenge = await challengesRepository.create(
-      Challenge.create({
-        title: 'Test Challenge',
-        description: 'Test Description',
-      }),
-    );
+    const challenge = Challenge.create({
+      title: 'Test Challenge',
+      description: 'Test Description',
+    });
+    await challengesRepository.create(challenge);
 
     await submissionsRepository.create(
       makeSubmission({

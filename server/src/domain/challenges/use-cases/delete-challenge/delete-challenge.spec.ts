@@ -17,12 +17,11 @@ describe('Delete challenge use case', () => {
   });
 
   it('should delete a challenge', async () => {
-    const newChallenge = await challengesRepository.create(
-      Challenge.create({
-        title: 'Back-end Challenge',
-        description: 'This is a back-end challenge',
-      }),
-    );
+    const newChallenge = Challenge.create({
+      title: 'Back-end Challenge',
+      description: 'This is a back-end challenge',
+    });
+    await challengesRepository.create(newChallenge);
 
     await expect(challengesRepository.findById(newChallenge.id)).resolves.toBeDefined();
 

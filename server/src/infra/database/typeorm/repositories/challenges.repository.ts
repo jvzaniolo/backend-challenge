@@ -15,7 +15,7 @@ export class TypeORMChallengesRepository implements ChallengesRepository {
 
   async create(input: Challenge) {
     const challenge = this.challengeRepository.create(ChallengeMapper.toDatabase(input));
-    return ChallengeMapper.toDomain(await this.challengeRepository.save(challenge));
+    await this.challengeRepository.save(challenge);
   }
 
   async update(id: string, challenge: Partial<Challenge>) {

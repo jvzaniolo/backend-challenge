@@ -23,12 +23,11 @@ describe('Submit challenge use case', () => {
   });
 
   it('should submit a challenge for correction', async () => {
-    const challenge = await challengesRepository.create(
-      Challenge.create({
-        title: 'Test Challenge',
-        description: 'Test Description',
-      }),
-    );
+    const challenge = Challenge.create({
+      title: 'Test Challenge',
+      description: 'Test Description',
+    });
+    await challengesRepository.create(challenge);
 
     const { submission } = await sut.execute({
       challengeId: challenge.id,
@@ -42,12 +41,11 @@ describe('Submit challenge use case', () => {
   });
 
   it('should throw an error if the repository URL is invalid', async () => {
-    const challenge = await challengesRepository.create(
-      Challenge.create({
-        title: 'Test Challenge',
-        description: 'Test Description',
-      }),
-    );
+    const challenge = Challenge.create({
+      title: 'Test Challenge',
+      description: 'Test Description',
+    });
+    await challengesRepository.create(challenge);
 
     await expect(
       sut.execute({

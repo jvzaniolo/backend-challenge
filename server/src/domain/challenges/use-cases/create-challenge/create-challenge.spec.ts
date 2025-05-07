@@ -1,3 +1,4 @@
+import { Challenge } from '../../entities/challenge';
 import { ChallengesRepository } from '../../repositories/challenges.repository';
 import { FakeChallengesRepository } from '../../repositories/fake/fake-challenges.repository';
 import { CreateChallengeUseCase } from './create-challenge';
@@ -16,10 +17,12 @@ describe('Create challenge use case', () => {
   });
 
   it('should create a new challenge', async () => {
-    const { challenge } = await sut.execute({
+    const challenge = Challenge.create({
       title: 'Back-end Challenge',
       description: 'This is a back-end challenge',
     });
+
+    await sut.execute(challenge);
 
     expect(challenge).toBeDefined();
     expect(challenge.id).toBeDefined();
