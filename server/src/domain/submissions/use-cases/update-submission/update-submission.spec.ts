@@ -1,5 +1,6 @@
 import { randomUUID } from 'node:crypto';
 import { Submission, SubmissionStatus } from '../../entities/submission';
+import { SubmissionNotFoundError } from '../../errors/submission-not-found';
 import { FakeSubmissionsRepository } from '../../repositories/fake/fake-submissions.repository';
 import { SubmissionsRepository } from '../../repositories/submissions-repository.interface';
 import { UpdateSubmissionUseCase } from './update-submission';
@@ -54,6 +55,6 @@ describe('Update submission use case', () => {
         status: SubmissionStatus.Done,
         grade: 8,
       }),
-    ).rejects.toThrow('Submission not found');
+    ).rejects.toBeInstanceOf(SubmissionNotFoundError);
   });
 });

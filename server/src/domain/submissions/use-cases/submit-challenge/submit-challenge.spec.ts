@@ -1,7 +1,9 @@
 import { Challenge } from '~/domain/challenges/entities/challenge';
+import { ChallengeNotFoundError } from '~/domain/challenges/errors/challenge-not-found';
 import { ChallengesRepository } from '../../../challenges/repositories/challenges.repository';
 import { FakeChallengesRepository } from '../../../challenges/repositories/fake/fake-challenges.repository';
 import { SubmissionStatus } from '../../entities/submission';
+import { InvalidGitHubURLError } from '../../errors/invalid-github-url';
 import { FakeSubmissionsRepository } from '../../repositories/fake/fake-submissions.repository';
 import { SubmissionsRepository } from '../../repositories/submissions-repository.interface';
 import { SubmitChallengeUseCase } from './submit-challenge';
@@ -52,7 +54,7 @@ describe('Submit challenge use case', () => {
         challengeId: challenge.id,
         repositoryUrl: 'invalid-url',
       }),
-    ).rejects.toThrow('Invalid GitHub repository URL.');
+    ).rejects.toBeInstanceOf(InvalidGitHubURLError);
 
     const submission = await submissionsRepository.findMany({
       perPage: 1,
@@ -72,7 +74,7 @@ describe('Submit challenge use case', () => {
         challengeId: 'non-existing-challenge-id',
         repositoryUrl: 'https://github.com/user/repo',
       }),
-    ).rejects.toThrow('Challenge not found.');
+    ).rejects.toBeInstanceOf(ChallengeNotFoundError);
 
     const submission = await submissionsRepository.findMany({ perPage: 10 });
 

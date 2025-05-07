@@ -1,8 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import { DomainEvents } from '~/core/events/domain-events';
+import { ChallengeNotFoundError } from '~/domain/challenges/errors/challenge-not-found';
 import { isGithubRepo } from '~/domain/submissions/utils/is-github-repo';
 import { ChallengesRepository } from '../../../challenges/repositories/challenges.repository';
 import { Submission, SubmissionStatus } from '../../entities/submission';
+import { InvalidGitHubURLError } from '../../errors/invalid-github-url';
 import { SubmitChallengeEvent } from '../../events/submit-challenge.event';
 import { SubmissionsRepository } from '../../repositories/submissions-repository.interface';
 
@@ -24,7 +26,7 @@ export class SubmitChallengeUseCase {
       await this.submissionsRepository.update(submission.id, {
         status: SubmissionStatus.Error,
       });
-      throw new Error('Invalid GitHub repository URL.');
+      throw new InvalidGitHubURLError();
     }
 
     const challenge = await this.challengesRepository.findById(challengeId);
@@ -33,7 +35,7 @@ export class SubmitChallengeUseCase {
       await this.submissionsRepository.update(submission.id, {
         status: SubmissionStatus.Error,
       });
-      throw new Error('Challenge not found.');
+      throw new ChallengeNotFoundError();
     }
 
     DomainEvents.dispatch(new SubmitChallengeEvent(submission.id, submission.repositoryUrl));
