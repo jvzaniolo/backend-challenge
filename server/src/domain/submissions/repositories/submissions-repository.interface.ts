@@ -2,13 +2,9 @@ import { Paginated, PaginatedArgs } from '~/core/pagination';
 import { Submission, SubmissionStatus } from '../entities/submission';
 
 export abstract class SubmissionsRepository {
-  abstract create(args: { challengeId: string; repositoryUrl: string }): Promise<Submission>;
-  abstract update(args: {
-    id: string;
-    status?: SubmissionStatus;
-    grade?: number;
-  }): Promise<Submission | null>;
-  abstract findBy(args: { id: string }): Promise<Submission | null>;
+  abstract create(submission: Submission): Promise<void>;
+  abstract update(id: string, submission: Partial<Submission>): Promise<Submission | null>;
+  abstract findById(id: string): Promise<Submission | null>;
   abstract findMany(
     args: {
       status?: SubmissionStatus;

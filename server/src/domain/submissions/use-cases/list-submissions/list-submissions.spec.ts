@@ -32,14 +32,18 @@ describe('List submissions use case', () => {
   });
 
   it('should return an array of submissions', async () => {
-    await submissionsRepository.create({
-      challengeId: randomUUID(),
-      repositoryUrl: 'https://github.com/example/repo-1',
-    });
-    await submissionsRepository.create({
-      challengeId: randomUUID(),
-      repositoryUrl: 'https://github.com/example/repo-2',
-    });
+    await submissionsRepository.create(
+      Submission.create({
+        challengeId: randomUUID(),
+        repositoryUrl: 'https://github.com/example/repo-1',
+      }),
+    );
+    await submissionsRepository.create(
+      Submission.create({
+        challengeId: randomUUID(),
+        repositoryUrl: 'https://github.com/example/repo-2',
+      }),
+    );
 
     const result = await sut.execute({ perPage: 10 });
 
@@ -47,12 +51,10 @@ describe('List submissions use case', () => {
       expect.objectContaining({
         items: [
           expect.objectContaining({
-            grade: null,
             status: SubmissionStatus.Pending,
             repositoryUrl: 'https://github.com/example/repo-1',
           }),
           expect.objectContaining({
-            grade: null,
             status: SubmissionStatus.Pending,
             repositoryUrl: 'https://github.com/example/repo-2',
           }),
@@ -72,10 +74,12 @@ describe('List submissions use case', () => {
   });
 
   it('should filter submissions by status', async () => {
-    await submissionsRepository.create({
-      challengeId: randomUUID(),
-      repositoryUrl: 'https://github.com/example/repo-1',
-    });
+    await submissionsRepository.create(
+      Submission.create({
+        challengeId: randomUUID(),
+        repositoryUrl: 'https://github.com/example/repo-1',
+      }),
+    );
 
     const result = await sut.execute({ status: SubmissionStatus.Pending, perPage: 10 });
 

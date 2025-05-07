@@ -4,30 +4,23 @@ import { SubmissionsRepository } from '../submissions-repository.interface';
 export class FakeSubmissionsRepository implements SubmissionsRepository {
   private submissions: Submission[] = [];
 
-  async create(submission: Submission): Promise<Submission> {
-    const newSubmission = Submission.create(submission);
-    this.submissions.push(newSubmission);
-    return newSubmission;
+  async create(submission: Submission) {
+    this.submissions.push(submission);
   }
 
-  async update(input: {
-    id: string;
-    grade?: number;
-    status?: SubmissionStatus;
-  }): Promise<Submission | null> {
-    const submission = this.submissions.find((submission) => submission.id === input.id);
-    if (!submission) {
+  async update(id: string, input: Partial<Submission>) {
+    const submissionIndex = this.submissions.findIndex((submission) => submission.id === id);
+    if (submissionIndex === -1) {
       return null;
     }
-    Object.assign(submission, {
-      grade: input.grade ?? submission.grade,
-      status: input.status ?? submission.status,
-    });
-    return submission;
+
+    this.submissions[submissionIndex] = Object.assign(this.submissions[submissionIndex], input);
+
+    return this.submissions[submissionIndex];
   }
 
-  async findBy(input: { id: string }): Promise<Submission | null> {
-    return this.submissions.find((submission) => submission.id === input.id) || null;
+  async findById(id: string) {
+    return this.submissions.find((submission) => submission.id === id) || null;
   }
 
   async findMany({

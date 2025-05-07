@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { DomainEvents } from '~/core/events/domain-events';
 import { isGithubRepo } from '~/domain/submissions/utils/is-github-repo';
 import { ChallengesRepository } from '../../../challenges/repositories/challenges.repository';
-import { SubmissionStatus } from '../../entities/submission';
+import { Submission, SubmissionStatus } from '../../entities/submission';
 import { SubmitChallengeEvent } from '../../events/submit-challenge.event';
 import { SubmissionsRepository } from '../../repositories/submissions-repository.interface';
 
@@ -10,19 +10,18 @@ import { SubmissionsRepository } from '../../repositories/submissions-repository
 export class SubmitChallengeUseCase {
   constructor(
     private readonly challengesRepository: ChallengesRepository,
-
     private readonly submissionsRepository: SubmissionsRepository,
   ) {}
 
   async execute({ challengeId, repositoryUrl }: { challengeId: string; repositoryUrl: string }) {
-    const submission = await this.submissionsRepository.create({
+    const submission = Submission.create({
       challengeId,
       repositoryUrl,
     });
+    await this.submissionsRepository.create(submission);
 
     if (!isGithubRepo(repositoryUrl)) {
-      await this.submissionsRepository.update({
-        id: submission.id,
+      await this.submissionsRepository.update(submission.id, {
         status: SubmissionStatus.Error,
       });
       throw new Error('Invalid GitHub repository URL.');
@@ -31,8 +30,7 @@ export class SubmitChallengeUseCase {
     const challenge = await this.challengesRepository.findById(challengeId);
 
     if (!challenge) {
-      await this.submissionsRepository.update({
-        id: submission.id,
+      await this.submissionsRepository.update(submission.id, {
         status: SubmissionStatus.Error,
       });
       throw new Error('Challenge not found.');

@@ -1,7 +1,6 @@
 import { Field, Float, ObjectType, registerEnumType } from '@nestjs/graphql';
-
 import { Challenge } from '~/domain/challenges/entities/challenge';
-import { Submission, SubmissionStatus } from '~/domain/submissions/entities/submission';
+import { SubmissionInterface, SubmissionStatus } from '~/domain/submissions/entities/submission';
 import { CustomUuidScalar } from '../scalars/uuid.scalar';
 import { ChallengeType } from './challenge.type';
 import { PaginationType } from './pagination.type';
@@ -16,7 +15,7 @@ registerEnumType(SubmissionStatus, {
 });
 
 @ObjectType('Submission')
-export class SubmissionType implements Submission {
+export class SubmissionType implements SubmissionInterface {
   @Field(() => CustomUuidScalar)
   id: string;
 
@@ -42,7 +41,7 @@ export class SubmissionType implements Submission {
 @ObjectType()
 export class PaginatedSubmissions {
   @Field(() => [SubmissionType])
-  items: Submission[];
+  items: SubmissionType[];
 
   @Field(() => PaginationType)
   pagination: PaginationType;

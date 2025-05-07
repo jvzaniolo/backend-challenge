@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Between, ILike, Repository } from 'typeorm';
-import { SubmissionStatus } from '~/domain/submissions/entities/submission';
+import { Submission, SubmissionStatus } from '~/domain/submissions/entities/submission';
 import { SubmissionsRepository } from '~/domain/submissions/repositories/submissions-repository.interface';
 import { SubmissionMapper } from '../mappers/submission.mapper';
 import { SubmissionSchema } from '../schema/submission.schema';
@@ -13,32 +13,25 @@ export class TypeORMSubmissionsRepository implements SubmissionsRepository {
     private readonly submissionRepository: Repository<SubmissionSchema>,
   ) {}
 
-  async create({ challengeId, repositoryUrl }: { challengeId: string; repositoryUrl: string }) {
-    const submission = this.submissionRepository.create({
-      challengeId,
-      repositoryUrl,
-    });
-    await this.submissionRepository.save(submission);
-    return SubmissionMapper.toDomain(submission);
+  async create(submission: Submission) {
+    const data = this.submissionRepository.create(SubmissionMapper.toDatabase(submission));
+    await this.submissionRepository.save(data);
   }
 
-  async update({ id, status, grade }: { id: string; status?: SubmissionStatus; grade?: number }) {
+  async update(id: string, input: Partial<Submission>) {
     const submission = await this.submissionRepository.findOneBy({ id });
 
     if (!submission) {
       return null;
     }
 
-    this.submissionRepository.merge(submission, {
-      status,
-      grade,
-    });
+    this.submissionRepository.merge(submission, input);
 
     const updatedSubmission = await this.submissionRepository.save(submission);
     return SubmissionMapper.toDomain(updatedSubmission);
   }
 
-  async findBy({ id }: { id: string }) {
+  async findById(id: string) {
     const submission = await this.submissionRepository.findOne({
       where: { id },
       relations: {
