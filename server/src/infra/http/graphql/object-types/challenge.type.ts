@@ -1,12 +1,12 @@
 import { Field, ObjectType } from '@nestjs/graphql';
-import { Challenge } from '~/domain/challenges/entities/challenge';
+import { ChallengeInterface } from '~/domain/challenges/entities/challenge';
 import { Submission } from '~/domain/submissions/entities/submission';
 import { CustomUuidScalar } from '../scalars/uuid.scalar';
 import { PaginationType } from './pagination.type';
 import { SubmissionType } from './submission.type';
 
 @ObjectType('Challenge')
-export class ChallengeType implements Challenge {
+export class ChallengeType implements ChallengeInterface {
   @Field(() => CustomUuidScalar)
   id: string;
 
@@ -26,7 +26,7 @@ export class ChallengeType implements Challenge {
 @ObjectType()
 export class PaginatedChallenge {
   @Field(() => [ChallengeType])
-  items: Challenge[];
+  items: ChallengeType[];
 
   @Field(() => PaginationType)
   pagination: PaginationType;

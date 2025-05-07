@@ -4,33 +4,28 @@ import { ChallengesRepository } from '../challenges.repository';
 export class FakeChallengesRepository implements ChallengesRepository {
   private challenges: Challenge[] = [];
 
-  async create(input: { title: string; description: string }): Promise<Challenge> {
-    const challenge = Challenge.create({
-      title: input.title,
-      description: input.description,
-    });
+  async create(challenge: Challenge) {
     this.challenges.push(challenge);
     return challenge;
   }
 
-  async update(input: {
-    id: string;
-    title?: string;
-    description?: string;
-  }): Promise<Challenge | null> {
-    const challenge = this.challenges.find((challenge) => challenge.id === input.id);
-    if (!challenge) {
+  async update(challenge: Challenge) {
+    const challengeIndex = this.challenges.findIndex((item) => item.id === challenge.id);
+
+    if (challengeIndex === -1) {
       return null;
     }
-    Object.assign(challenge, {
-      title: input.title ?? challenge.title,
-      description: input.description ?? challenge.description,
-    });
-    return challenge;
+
+    this.challenges[challengeIndex] = {
+      ...this.challenges[challengeIndex],
+      ...challenge,
+    } as Challenge;
+
+    return this.challenges[challengeIndex];
   }
 
-  async delete(input: { id: string }): Promise<Challenge | null> {
-    const challengeIndex = this.challenges.findIndex((challenge) => challenge.id === input.id);
+  async delete(id: string) {
+    const challengeIndex = this.challenges.findIndex((item) => item.id === id);
     if (challengeIndex === -1) {
       return null;
     }
@@ -38,8 +33,8 @@ export class FakeChallengesRepository implements ChallengesRepository {
     return deletedChallenge;
   }
 
-  async findBy(input: { id: string }): Promise<Challenge | null> {
-    return this.challenges.find((challenge) => challenge.id === input.id) || null;
+  async findById(id: string) {
+    return this.challenges.find((challenge) => challenge.id === id) || null;
   }
 
   async findMany({

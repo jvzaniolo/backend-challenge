@@ -2,14 +2,10 @@ import { Paginated, PaginatedArgs } from '~/core/pagination';
 import { Challenge } from '../entities/challenge';
 
 export abstract class ChallengesRepository {
-  abstract create(input: { title: string; description: string }): Promise<Challenge>;
-  abstract update(input: {
-    id: string;
-    title?: string;
-    description?: string;
-  }): Promise<Challenge | null>;
-  abstract delete(input: { id: string }): Promise<Challenge | null>;
-  abstract findBy(args: { id: string }): Promise<Challenge | null>;
+  abstract create(challenge: Challenge): Promise<Challenge>;
+  abstract update(challenge: Partial<Challenge>): Promise<Challenge | null>;
+  abstract delete(id: string): Promise<Challenge | null>;
+  abstract findById(id: string): Promise<Challenge | null>;
   abstract findMany(
     args: {
       title?: string;

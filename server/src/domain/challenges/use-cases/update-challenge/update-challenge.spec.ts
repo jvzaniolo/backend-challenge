@@ -1,3 +1,4 @@
+import { Challenge } from '../../entities/challenge';
 import { ChallengesRepository } from '../../repositories/challenges.repository';
 import { FakeChallengesRepository } from '../../repositories/fake/fake-challenges.repository';
 import { UpdateChallengeUseCase } from './update-challenge';
@@ -16,10 +17,12 @@ describe('Update challenge use case', () => {
   });
 
   it('should update a challenge', async () => {
-    const newChallenge = await challengesRepository.create({
-      title: 'Back-end Challenge',
-      description: 'This is a back-end challenge',
-    });
+    const newChallenge = await challengesRepository.create(
+      Challenge.create({
+        title: 'Back-end Challenge',
+        description: 'This is a back-end challenge',
+      }),
+    );
 
     const { challenge } = await sut.execute({
       id: newChallenge.id,

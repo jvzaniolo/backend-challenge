@@ -28,7 +28,7 @@ export class SubmitChallengeUseCase {
       throw new Error('Invalid GitHub repository URL.');
     }
 
-    const challenge = await this.challengesRepository.findBy({ id: challengeId });
+    const challenge = await this.challengesRepository.findById(challengeId);
 
     if (!challenge) {
       await this.submissionsRepository.update({

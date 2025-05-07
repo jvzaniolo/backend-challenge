@@ -1,3 +1,4 @@
+import { Challenge } from '~/domain/challenges/entities/challenge';
 import { ChallengesRepository } from '../../../challenges/repositories/challenges.repository';
 import { FakeChallengesRepository } from '../../../challenges/repositories/fake/fake-challenges.repository';
 import { SubmissionStatus } from '../../entities/submission';
@@ -22,10 +23,12 @@ describe('Submit challenge use case', () => {
   });
 
   it('should submit a challenge for correction', async () => {
-    const challenge = await challengesRepository.create({
-      title: 'Test Challenge',
-      description: 'Test Description',
-    });
+    const challenge = await challengesRepository.create(
+      Challenge.create({
+        title: 'Test Challenge',
+        description: 'Test Description',
+      }),
+    );
 
     const { submission } = await sut.execute({
       challengeId: challenge.id,
@@ -39,10 +42,12 @@ describe('Submit challenge use case', () => {
   });
 
   it('should throw an error if the repository URL is invalid', async () => {
-    const challenge = await challengesRepository.create({
-      title: 'Test Challenge',
-      description: 'Test Description',
-    });
+    const challenge = await challengesRepository.create(
+      Challenge.create({
+        title: 'Test Challenge',
+        description: 'Test Description',
+      }),
+    );
 
     await expect(
       sut.execute({

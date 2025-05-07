@@ -22,7 +22,10 @@ describe('Create challenge use case', () => {
     });
 
     expect(challenge).toBeDefined();
+    expect(challenge.id).toBeDefined();
     expect(challenge.title).toBe('Back-end Challenge');
     expect(challenge.description).toBe('This is a back-end challenge');
+    expect(challenge.createdAt).toBeInstanceOf(Date);
+    expect(challenge.submissions).toHaveLength(0);
   });
 });

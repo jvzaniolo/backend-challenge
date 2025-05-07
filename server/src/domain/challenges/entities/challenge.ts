@@ -1,28 +1,45 @@
 import { randomUUID } from 'node:crypto';
+import { Optional } from '~/core/types/optional';
 import { Submission } from '../../submissions/entities/submission';
 
+export interface ChallengeInterface {
+  id: string;
+  title: string;
+  description: string;
+  createdAt: Date;
+  submissions?: Submission[];
+}
+
 export class Challenge {
-  constructor(
-    public id: string,
-    public title: string,
-    public description: string,
-    public createdAt: Date,
-    public submissions?: Submission[],
-  ) {}
+  protected constructor(protected props: ChallengeInterface) {}
 
   static create({
     id = randomUUID(),
     title,
     description,
     createdAt = new Date(),
-    submissions,
-  }: {
-    title: string;
-    description: string;
-    id?: string;
-    createdAt?: Date;
-    submissions?: Submission[];
-  }): Challenge {
-    return new Challenge(id, title, description, createdAt, submissions);
+    submissions = [],
+  }: Optional<ChallengeInterface, 'id' | 'createdAt'>): Challenge {
+    return new Challenge({ id, title, description, createdAt, submissions });
+  }
+
+  get id() {
+    return this.props.id;
+  }
+
+  get title() {
+    return this.props.title;
+  }
+
+  get description() {
+    return this.props.description;
+  }
+
+  get createdAt() {
+    return this.props.createdAt;
+  }
+
+  get submissions() {
+    return this.props.submissions;
   }
 }

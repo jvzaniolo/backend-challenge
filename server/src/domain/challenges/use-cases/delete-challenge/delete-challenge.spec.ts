@@ -1,3 +1,4 @@
+import { Challenge } from '../../entities/challenge';
 import { ChallengesRepository } from '../../repositories/challenges.repository';
 import { FakeChallengesRepository } from '../../repositories/fake/fake-challenges.repository';
 import { DeleteChallengeUseCase } from './delete-challenge';
@@ -16,26 +17,18 @@ describe('Delete challenge use case', () => {
   });
 
   it('should delete a challenge', async () => {
-    const newChallenge = await challengesRepository.create({
-      title: 'Back-end Challenge',
-      description: 'This is a back-end challenge',
-    });
-
-    await expect(
-      challengesRepository.findBy({
-        id: newChallenge.id,
+    const newChallenge = await challengesRepository.create(
+      Challenge.create({
+        title: 'Back-end Challenge',
+        description: 'This is a back-end challenge',
       }),
-    ).resolves.toBeDefined();
+    );
 
-    await sut.execute({
-      id: newChallenge.id,
-    });
+    await expect(challengesRepository.findById(newChallenge.id)).resolves.toBeDefined();
 
-    await expect(
-      challengesRepository.findBy({
-        id: newChallenge.id,
-      }),
-    ).resolves.toBeNull();
+    await sut.execute({ id: newChallenge.id });
+
+    await expect(challengesRepository.findById(newChallenge.id)).resolves.toBeNull();
   });
 
   it('should throw an error if the challenge does not exist', async () => {

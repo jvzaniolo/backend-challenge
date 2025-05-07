@@ -1,4 +1,5 @@
 import { randomUUID } from 'node:crypto';
+import { Challenge } from '~/domain/challenges/entities/challenge';
 import { ChallengesRepository } from '../../../challenges/repositories/challenges.repository';
 import { FakeChallengesRepository } from '../../../challenges/repositories/fake/fake-challenges.repository';
 import { Submission, SubmissionStatus } from '../../entities/submission';
@@ -92,10 +93,12 @@ describe('List submissions use case', () => {
   });
 
   it('should filter submissions by challengeTitle', async () => {
-    const challenge = await challengesRepository.create({
-      title: 'Test Challenge',
-      description: 'Test Description',
-    });
+    const challenge = await challengesRepository.create(
+      Challenge.create({
+        title: 'Test Challenge',
+        description: 'Test Description',
+      }),
+    );
 
     await submissionsRepository.create(
       makeSubmission({
