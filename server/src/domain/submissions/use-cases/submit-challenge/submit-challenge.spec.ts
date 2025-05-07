@@ -26,7 +26,7 @@ describe('Submit challenge use case', () => {
     expect(sut).toBeDefined();
   });
 
-  it('should submit a challenge for correction', async () => {
+  it('should create a submission', async () => {
     const challenge = Challenge.create({
       title: 'Test Challenge',
       description: 'Test Description',
@@ -38,10 +38,12 @@ describe('Submit challenge use case', () => {
       repositoryUrl: 'https://github.com/user/repo',
     });
 
-    expect(submission).toBeDefined();
-    expect(submission.id).toBeDefined();
-    expect(submission.grade).toBeNull();
-    expect(submission.status).toEqual(SubmissionStatus.Pending);
+    const result = await submissionsRepository.findById(submission.id);
+
+    expect(result).toBeDefined();
+    expect(result?.id).toBeDefined();
+    expect(result?.grade).toBeNull();
+    expect(result?.status).toEqual(SubmissionStatus.Pending);
   });
 
   it('should throw an error if the repository URL is invalid', async () => {
