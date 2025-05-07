@@ -24,11 +24,13 @@ describe('Create challenge use case', () => {
 
     await sut.execute(challenge);
 
-    expect(challenge).toBeDefined();
-    expect(challenge.id).toBeDefined();
-    expect(challenge.title).toBe('Back-end Challenge');
-    expect(challenge.description).toBe('This is a back-end challenge');
-    expect(challenge.createdAt).toBeInstanceOf(Date);
-    expect(challenge.submissions).toHaveLength(0);
+    const data = await fakeChallengesRepository.findById(challenge.id);
+
+    expect(data).toBeDefined();
+    expect(data?.id).toBeDefined();
+    expect(data?.title).toBe('Back-end Challenge');
+    expect(data?.description).toBe('This is a back-end challenge');
+    expect(data?.createdAt).toBeInstanceOf(Date);
+    expect(data?.submissions).toHaveLength(0);
   });
 });
